@@ -845,7 +845,7 @@ export default function App() {
         showToast("Por favor ingresa los nombres y apellidos de los asistentes.");
         return;
       }
-      message = `¡Hola ${personName}! Confirmo nuestra asistencia a la boda de Yuleisi & Elder ✨💍\n\n👥 *Nombres y apellidos de los asistentes:*\n${names}\n\n¡Nos vemos el 24 de Octubre para celebrar juntos! 🎉`;
+      message = `¡Hola ${personName}! Confirmo nuestra asistencia a su boda ✨💍\n\n👥 *Nombres y apellidos de los asistentes:*\n${names}\n\n¡Nos vemos el 24 de Octubre para celebrar juntos! 🎉`;
     } else {
       message = `¡Hola ${personName}! Lamentablemente no podré asistir a su boda, pero les deseo de todo corazón lo mejor y muchas bendiciones en esta hermosa etapa juntos ✨❤️`;
     }
