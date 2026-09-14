@@ -596,6 +596,20 @@ function DressManSVG() {
   );
 }
 
+function WhatsAppIcon({ size = 20, className = "" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M12.031 2C6.495 2 2 6.495 2 12.031c0 1.908.536 3.69 1.464 5.212L2 22l4.908-1.428a10.007 10.007 0 0 0 5.123 1.464c5.536 0 10.031-4.495 10.031-10.031S17.567 2 12.031 2zm0 18.257a8.216 8.216 0 0 1-4.204-1.157l-.302-.18-2.908.847.854-2.833-.198-.316a8.214 8.214 0 0 1-1.267-4.387c0-4.549 3.702-8.252 8.251-8.252 4.549 0 8.252 3.703 8.252 8.252 0 4.549-3.703 8.252-8.252 8.252zm4.526-6.177c-.248-.124-1.468-.724-1.696-.807-.228-.083-.394-.124-.56.124-.166.248-.642.807-.787.973-.145.166-.29.186-.538.062-.248-.124-1.047-.386-1.995-1.231-.738-.658-1.236-1.472-1.381-1.72-.145-.248-.015-.382.109-.506.111-.111.248-.29.373-.435.124-.145.166-.248.248-.414.083-.166.041-.311-.021-.435-.062-.124-.56-1.349-.767-1.848-.201-.486-.406-.42-.56-.428l-.477-.008c-.166 0-.435.062-.663.311-.228.248-.87 0.85-.87 2.073s.891 2.404 1.015 2.57c.124.166 1.753 2.678 4.248 3.755.594.256 1.058.409 1.42.524.597.19 1.14.163 1.569.099.479-.071 1.468-.601 1.675-1.182.207-.581.207-1.078.145-1.182-.062-.104-.228-.166-.477-.29z" />
+    </svg>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════
    1. PANTALLA DE APERTURA (SOBRE Y CARTA HD)
    ═══════════════════════════════════════════════════════ */
@@ -785,34 +799,13 @@ export default function App() {
 
   // Estados interactivos
   const [copiedBank, setCopiedBank] = useState("");
-  const [rsvpSent, setRsvpSent] = useState(false);
-  const [guestName, setGuestName] = useState("");
   const [attending, setAttending] = useState("si");
-  const [guestList, setGuestList] = useState([""]);
+  const [guestNames, setGuestNames] = useState("");
   const [toastMsg, setToastMsg] = useState("");
 
   const showToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(""), 3000);
-  };
-
-  const handleAddGuest = () => {
-    setGuestList((prev) => [...prev, ""]);
-  };
-
-  const handleRemoveGuest = (index) => {
-    setGuestList((prev) => {
-      if (prev.length <= 1) return [""];
-      return prev.filter((_, i) => i !== index);
-    });
-  };
-
-  const handleGuestChange = (index, value) => {
-    setGuestList((prev) => {
-      const next = [...prev];
-      next[index] = value;
-      return next;
-    });
   };
 
   const copyToClipboard = (text, bankName) => {
@@ -840,47 +833,25 @@ export default function App() {
     window.open(url, "_blank");
   };
 
-  const handleRsvpSubmit = (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const isAttending = attending === "si";
+  const sendWhatsApp = (recipient) => {
+    const isBride = recipient === "novia";
+    const phone = isBride ? "51987147762" : "51914854112";
+    const personName = isBride ? "Yuleisi" : "Elder";
 
-    let primaryName = "";
-    let validGuests = [];
-
-    if (isAttending) {
-      validGuests = guestList.map((g) => g.trim()).filter(Boolean);
-      if (validGuests.length === 0) {
-        showToast("Por favor ingresa al menos un nombre.");
+    let message = "";
+    if (attending === "si") {
+      const names = guestNames.trim();
+      if (!names) {
+        showToast("Por favor ingresa los nombres y apellidos de los asistentes.");
         return;
       }
-      primaryName = validGuests[0];
+      message = `¡Hola ${personName}! Confirmo nuestra asistencia a la boda de Yuleisi & Elder ✨💍\n\n👥 *Nombres y apellidos de los asistentes:*\n${names}\n\n¡Nos vemos el 24 de Octubre para celebrar juntos! 🎉`;
     } else {
-      primaryName = (fd.get("nombreNoAsiste") || "").trim();
-      if (!primaryName) {
-        showToast("Por favor ingresa tu nombre y apellido.");
-        return;
-      }
+      message = `¡Hola ${personName}! Lamentablemente no podré asistir a su boda, pero les deseo de todo corazón lo mejor y muchas bendiciones en esta hermosa etapa juntos ✨❤️`;
     }
 
-    const data = {
-      asistencia: attending,
-      asistentes: isAttending ? validGuests : [primaryName],
-      nombre: primaryName,
-      totalPersonas: isAttending ? validGuests.length : 0,
-      restricciones: fd.get("restricciones") || "Ninguna",
-      cancion: fd.get("cancion") || "Cualquiera para celebrar",
-      mensaje: fd.get("mensaje") || "",
-      fecha: new Date().toISOString(),
-    };
-
-    const saved = JSON.parse(localStorage.getItem("boda_rsvp_confirmaciones") || "[]");
-    saved.push(data);
-    localStorage.setItem("boda_rsvp_confirmaciones", JSON.stringify(saved));
-
-    setGuestName(primaryName);
-    setRsvpSent(true);
-    showToast("¡Confirmación registrada con éxito!");
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
   };
 
   const pad = (n) => String(n).padStart(2, "0");
@@ -1450,166 +1421,85 @@ export default function App() {
               Tu presencia es muy importante para nosotros. Por favor, confírmanos tu asistencia antes del 30 de setiembre de 2026.
             </p>
 
-            {rsvpSent ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="py-8 text-center"
-              >
-                <Check size={36} className="text-olive mx-auto mb-2" />
-                <h3 className="font-serif text-2xl text-olive font-semibold">
-                  ¡Muchas gracias, {guestName}!
-                </h3>
-                <p className="font-serif text-base text-muted mt-2 max-w-sm mx-auto leading-relaxed">
-                  {attending === "si"
-                    ? "Hemos registrado tu confirmación y la de tus acompañantes con éxito. ¡Nos llena de ilusión celebrar juntos este gran día!"
-                    : "Hemos recibido tu respuesta. Aunque lamentamos que no puedas acompañarnos, agradecemos mucho tu cariño y buenos deseos."}
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleRsvpSubmit} className="space-y-6 text-left">
-                {/* 1. Selección Asistir / No Asistir */}
-                <div>
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold mb-2.5">
-                    ¿Nos acompañarás en nuestro día? *
+            <div className="space-y-6 text-left">
+              {/* 1. Selección Asistir / No Asistir */}
+              <div>
+                <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold mb-2.5">
+                  ¿Nos acompañarás en nuestro día? *
+                </label>
+                <div className="space-y-2 font-serif text-base text-charcoal">
+                  <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="asistencia"
+                      value="si"
+                      checked={attending === "si"}
+                      onChange={() => setAttending("si")}
+                      className="accent-[#595F43] w-4 h-4 cursor-pointer"
+                    />
+                    <span>¡Sí, con mucho gusto asistiré!</span>
                   </label>
-                  <div className="space-y-2 font-serif text-base text-charcoal">
-                    <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
-                      <input
-                        type="radio"
-                        name="asistencia"
-                        value="si"
-                        checked={attending === "si"}
-                        onChange={() => setAttending("si")}
-                        className="accent-[#595F43] w-4 h-4 cursor-pointer"
-                      />
-                      <span>¡Sí, con mucho gusto asistiré!</span>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
-                      <input
-                        type="radio"
-                        name="asistencia"
-                        value="no"
-                        checked={attending === "no"}
-                        onChange={() => setAttending("no")}
-                        className="accent-[#595F43] w-4 h-4 cursor-pointer"
-                      />
-                      <span>Lo siento, no podré asistir</span>
-                    </label>
-                  </div>
+                  <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
+                    <input
+                      type="radio"
+                      name="asistencia"
+                      value="no"
+                      checked={attending === "no"}
+                      onChange={() => setAttending("no")}
+                      className="accent-[#595F43] w-4 h-4 cursor-pointer"
+                    />
+                    <span>Lo siento, no podré asistir</span>
+                  </label>
                 </div>
+              </div>
 
-                {/* 2. Flujo si ASISTE: Lista dinámica de personas */}
-                {attending === "si" ? (
-                  <>
-                    <div className="space-y-3 pt-1">
-                      <div className="flex items-center justify-between">
-                        <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold">
-                          {guestList.length === 1
-                            ? "Nombre y Apellido del Asistente *"
-                            : "Nombres y Apellidos de los Asistentes *"}
-                        </label>
-                        <span className="font-sans text-[0.72rem] text-muted font-medium">
-                          {guestList.length} {guestList.length === 1 ? "persona" : "personas"}
-                        </span>
-                      </div>
+              {/* 2. Si ASISTE: Cuadro grande para nombres */}
+              {attending === "si" && (
+                <div className="space-y-2 pt-1">
+                  <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold">
+                    Nombre y apellidos de los asistentes *
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={guestNames}
+                    onChange={(e) => setGuestNames(e.target.value)}
+                    placeholder="Escribe aquí los nombres y apellidos de las personas que asistirán..."
+                    className="w-full bg-transparent border border-olive/35 focus:border-olive rounded-xl p-3.5 font-serif text-base text-charcoal outline-none transition-colors resize-none placeholder:italic placeholder:text-muted/60"
+                  />
+                </div>
+              )}
 
-                      <div className="space-y-3">
-                        {guestList.map((guest, idx) => (
-                          <div key={idx} className="flex items-center gap-2">
-                            <div className="relative flex-1">
-                              <input
-                                type="text"
-                                value={guest}
-                                onChange={(e) => handleGuestChange(idx, e.target.value)}
-                                required={idx === 0}
-                                placeholder={
-                                  idx === 0
-                                    ? "Nombre y apellido del asistente principal *"
-                                    : `Nombre y apellido del acompañante ${idx}`
-                                }
-                                className="input-minimal"
-                              />
-                            </div>
+              {/* 3. Botones de WhatsApp para Novia y Novio */}
+              <div className="pt-2 space-y-3">
+                <p className="font-sans text-[0.72rem] uppercase tracking-wider text-muted font-bold text-center">
+                  Enviar confirmación por WhatsApp a:
+                </p>
 
-                            {guestList.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveGuest(idx)}
-                                className="text-muted hover:text-terracotta transition-colors p-1.5 cursor-pointer"
-                                title="Eliminar acompañante"
-                                aria-label={`Eliminar acompañante ${idx + 1}`}
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+                  <button
+                    type="button"
+                    onClick={() => sendWhatsApp("novia")}
+                    className="btn-pill-olive w-full sm:flex-1 text-sm sm:text-base py-3 px-4 justify-center gap-2.5 shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer"
+                  >
+                    <WhatsAppIcon size={19} />
+                    <span>WhatsApp Novia</span>
+                  </button>
 
-                      <div className="pt-1">
-                        <button
-                          type="button"
-                          onClick={handleAddGuest}
-                          className="btn-pill-outline text-xs sm:text-sm py-1.5 px-4 flex items-center gap-2 cursor-pointer hover:scale-102 transition-all"
-                        >
-                          <Plus size={15} />
-                          <span>Agregar otro asistente</span>
-                        </button>
-                      </div>
-                    </div>
+                  <span className="font-serif italic text-2xl sm:text-3xl text-olive font-medium px-2 select-none">
+                    o
+                  </span>
 
-                    <div className="pt-4 text-center">
-                      <button
-                        type="submit"
-                        className="btn-pill-olive w-full text-base py-3 justify-center shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer"
-                      >
-                        <Send size={15} />
-                        <span>Confirmar Asistencia</span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Flujo si NO ASISTE */}
-                    <div>
-                      <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold mb-1">
-                        Nombre Completo *
-                      </label>
-                      <input
-                        type="text"
-                        name="nombreNoAsiste"
-                        required
-                        placeholder="Escribe tu nombre y apellido"
-                        className="input-minimal"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-sans text-[0.7rem] uppercase tracking-wider text-muted font-bold mb-1">
-                        Mensaje para los novios (opcional)
-                      </label>
-                      <input
-                        type="text"
-                        name="mensaje"
-                        placeholder="Déjanos unas palabras o tus mejores deseos..."
-                        className="input-minimal"
-                      />
-                    </div>
-
-                    <div className="pt-2 text-center">
-                      <button
-                        type="submit"
-                        className="btn-pill-olive w-full text-base py-3 justify-center shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer"
-                      >
-                        <Send size={15} />
-                        <span>Enviar Respuesta</span>
-                      </button>
-                    </div>
-                  </>
-                )}
-              </form>
-            )}
+                  <button
+                    type="button"
+                    onClick={() => sendWhatsApp("novio")}
+                    className="btn-pill-olive w-full sm:flex-1 text-sm sm:text-base py-3 px-4 justify-center gap-2.5 shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer bg-[#4F553B]"
+                  >
+                    <WhatsAppIcon size={19} />
+                    <span>WhatsApp Novio</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </section>
 

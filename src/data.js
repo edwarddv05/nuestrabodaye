@@ -18,6 +18,18 @@ export const wedding = {
     artist: "Ed Sheeran",
     src: "./assets/song.m4a",
   },
+  contact: {
+    bride: {
+      name: "Yuleisi",
+      phone: "51987147762",
+      displayPhone: "+51 987 147 762",
+    },
+    groom: {
+      name: "Elder",
+      phone: "51914854112",
+      displayPhone: "+51 914 854 112",
+    },
+  },
   parents: {
     bride: {
       father: "José Diaz Ortiz",
