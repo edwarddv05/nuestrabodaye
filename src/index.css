@@ -100,6 +100,8 @@
   aspect-ratio: 3 / 2;
   object-fit: cover;
   object-position: 36% center;
+  transform: scale(1.18);
+  transform-origin: 45% 48%;
 }
 
 .couple-memories {

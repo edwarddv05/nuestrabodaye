@@ -919,10 +919,10 @@ export default function App() {
         <div className="relative w-full max-w-2xl mx-auto my-8 overflow-hidden">
           <TornEdge position="top" bg="#FAF7F2" />
           <img
-            src="./assets/fotos/10.jpg"
-            alt="Yuleisi y Elder besándose entre los árboles del parque"
-            width="1620"
-            height="1080"
+            src="./assets/fotos/1-Foto-1.jpg"
+            alt="Yuleisi y Elder abrazados en las escaleras de piedra junto al mar"
+            width="1280"
+            height="853"
             fetchPriority="high"
             className="couple-cover"
           />
