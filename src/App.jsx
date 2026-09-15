@@ -663,10 +663,10 @@ function EnvelopeModal({ onEnter }) {
 
               <div className="flex flex-col items-center">
                 <Crown size={17} className="text-terracotta mb-0.5" />
-                <span className="font-sans text-[0.65rem] tracking-[0.25em] text-muted uppercase font-bold">
+                <span className="type-kicker text-muted">
                   {W.title}
                 </span>
-                <h2 className="font-script text-4xl sm:text-5xl text-olive my-0.5">
+                <h2 className="type-envelope-title text-olive my-0.5">
                   {W.bride} & {W.groom}
                 </h2>
                 <div className="flex items-center gap-2 text-terracotta my-0.5">
@@ -677,13 +677,13 @@ function EnvelopeModal({ onEnter }) {
               </div>
 
               <div className="max-w-[280px]">
-                <p className="font-serif italic text-sm sm:text-base text-charcoal leading-snug">
+                <p className="type-body-small italic text-charcoal leading-snug">
                   "{W.verse.text}."
                 </p>
-                <span className="font-sans text-[0.62rem] tracking-widest uppercase text-terracotta font-bold mt-0.5 block">
+                <span className="type-kicker text-terracotta mt-0.5 block">
                   {W.verse.ref}
                 </span>
-                <p className="font-serif text-xs sm:text-sm text-muted mt-1 leading-snug">
+                <p className="type-body-small text-muted mt-1 leading-snug">
                   Con inmensa alegría queremos invitarte a celebrar el inicio de nuestra vida juntos.
                 </p>
               </div>
@@ -691,7 +691,7 @@ function EnvelopeModal({ onEnter }) {
               <div className="pt-0.5">
                 <button
                   onClick={handleEnterWeb}
-                  className="btn-pill-olive text-sm py-2 px-7 flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  className="btn-pill-olive type-button py-2 px-7 flex items-center gap-2 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
                   <span>Abrir Invitación</span>
                   <ArrowRight size={14} />
@@ -735,7 +735,7 @@ function EnvelopeModal({ onEnter }) {
 function InlineMusicPlayer({ audio }) {
   return (
     <div className="text-center my-6 max-w-xs mx-auto">
-      <p className="font-serif text-sm sm:text-base text-[#383A30] mb-3 flex items-center justify-center gap-1.5 font-medium">
+      <p className="type-body-small text-[#383A30] mb-3 flex items-center justify-center gap-1.5 font-medium">
         Escucha nuestra canción
       </p>
 
@@ -755,7 +755,7 @@ function InlineMusicPlayer({ audio }) {
         <div className="flex items-center justify-center gap-6 text-[#595F43] mt-2">
           <button
             onClick={() => audio.skip(-10)}
-            className="text-[#595F43] hover:text-[#444933] hover:scale-110 transition-all p-1 cursor-pointer"
+            className="audio-skip text-[#595F43] hover:text-[#444933] hover:scale-110 transition-all p-1 cursor-pointer"
             title="Retroceder 10 segundos"
           >
             <SkipBack size={20} />
@@ -775,15 +775,15 @@ function InlineMusicPlayer({ audio }) {
 
           <button
             onClick={() => audio.skip(10)}
-            className="text-[#595F43] hover:text-[#444933] hover:scale-110 transition-all p-1 cursor-pointer"
+            className="audio-skip text-[#595F43] hover:text-[#444933] hover:scale-110 transition-all p-1 cursor-pointer"
             title="Avanzar 10 segundos"
           >
             <SkipForward size={20} />
           </button>
         </div>
 
-        <p className="font-sans text-[0.68rem] text-muted tracking-widest uppercase mt-3 font-semibold">
-          ♫ {W.song.title.toUpperCase()} — {W.song.artist.toUpperCase()}
+        <p className="type-track text-muted mt-3">
+          ♫ {W.song.title.toUpperCase()} · {W.song.artist.toUpperCase()}
         </p>
       </div>
     </div>
@@ -808,17 +808,29 @@ export default function App() {
     setTimeout(() => setToastMsg(""), 3000);
   };
 
-  const copyToClipboard = (text, bankName) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        setCopiedBank(bankName);
-        showToast(`¡Cuenta ${bankName} copiada con éxito!`);
-        setTimeout(() => setCopiedBank(""), 2200);
-      })
-      .catch(() => {
-        showToast(`Cuenta: ${text}`);
-      });
+  const copyToClipboard = async (text, bankName) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const fallback = document.createElement("textarea");
+        fallback.value = text;
+        fallback.setAttribute("readonly", "");
+        fallback.style.position = "fixed";
+        fallback.style.opacity = "0";
+        document.body.appendChild(fallback);
+        fallback.select();
+        const copied = document.execCommand("copy");
+        fallback.remove();
+        if (!copied) throw new Error("Clipboard unavailable");
+      }
+
+      setCopiedBank(bankName);
+      showToast(`¡Cuenta ${bankName} copiada con éxito!`);
+      setTimeout(() => setCopiedBank(""), 2200);
+    } catch {
+      showToast(`Cuenta: ${text}`);
+    }
   };
 
   const handleCalendar = () => {
@@ -878,7 +890,7 @@ export default function App() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 15 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#2E3027] text-[#FAF7F2] font-serif text-sm px-5 py-2 rounded-full shadow-lg border border-olive/30 flex items-center gap-2"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#2E3027] text-[#FAF7F2] type-body-small px-5 py-2 rounded-full shadow-lg border border-olive/30 flex items-center gap-2"
           >
             <Check size={15} className="text-terracotta" />
             <span>{toastMsg}</span>
@@ -898,13 +910,13 @@ export default function App() {
           >
             <BotanicalBranch />
 
-            <h2 className="font-serif text-2xl sm:text-3xl text-olive tracking-wide font-normal">
+            <h2 className="type-hero-kicker text-olive">
               El inicio de una vida juntos
             </h2>
 
-            <h1 className="font-script text-6xl sm:text-7xl md:text-8xl text-olive my-2 leading-none">
+            <h1 className="type-hero-names text-olive my-2">
               {W.bride}
-              <span className="block text-3xl sm:text-4xl font-serif text-terracotta my-1 font-light">
+              <span className="type-hero-ampersand text-terracotta my-1">
                 &
               </span>
               {W.groom}
@@ -938,41 +950,41 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="font-serif italic text-base sm:text-lg text-[#555848] leading-relaxed max-w-md mx-auto mb-8">
+            <p className="type-lead italic text-[#555848] leading-relaxed max-w-md mx-auto mb-8">
               "{W.quote}"
             </p>
 
-            <span className="font-serif text-xs tracking-[0.25em] text-terracotta uppercase font-semibold block mb-2">
+            <span className="type-kicker text-terracotta block mb-2">
               Con la bendición de Dios
             </span>
-            <h2 className="font-script text-4xl sm:text-5xl text-olive mb-10">
+            <h2 className="type-section-heading text-olive mb-10">
               y nuestros queridos padres
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 my-6">
               <div>
-                <h3 className="font-sans text-[0.7rem] uppercase tracking-[0.2em] text-muted font-bold mb-2">
+                <h3 className="type-kicker text-muted mb-2">
                   Padres de la Novia
                 </h3>
-                <p className="font-serif text-base sm:text-lg text-charcoal leading-snug flex items-center justify-center">
+                <p className="type-body text-charcoal leading-snug flex items-center justify-center">
                   <span>{W.parents.bride.father}</span>
                   {W.parents.bride.fatherDeceased && <MemorialDoveSVG />}
                 </p>
-                <p className="font-serif text-base sm:text-lg text-charcoal leading-snug flex items-center justify-center">
+                <p className="type-body text-charcoal leading-snug flex items-center justify-center">
                   <span>{W.parents.bride.mother}</span>
                   {W.parents.bride.motherDeceased && <MemorialDoveSVG />}
                 </p>
               </div>
 
               <div>
-                <h3 className="font-sans text-[0.7rem] uppercase tracking-[0.2em] text-muted font-bold mb-2">
+                <h3 className="type-kicker text-muted mb-2">
                   Padres del Novio
                 </h3>
-                <p className="font-serif text-base sm:text-lg text-charcoal leading-snug flex items-center justify-center">
+                <p className="type-body text-charcoal leading-snug flex items-center justify-center">
                   <span>{W.parents.groom.father}</span>
                   {W.parents.groom.fatherDeceased && <MemorialDoveSVG />}
                 </p>
-                <p className="font-serif text-base sm:text-lg text-charcoal leading-snug flex items-center justify-center">
+                <p className="type-body text-charcoal leading-snug flex items-center justify-center">
                   <span>{W.parents.groom.mother}</span>
                   {W.parents.groom.motherDeceased && <MemorialDoveSVG />}
                 </p>
@@ -981,10 +993,10 @@ export default function App() {
 
             {W.godparents?.rings?.name && (
               <div className="mt-8 pt-4">
-                <h3 className="font-sans text-[0.7rem] uppercase tracking-[0.2em] text-muted font-bold mb-1">
+                <h3 className="type-kicker text-muted mb-1">
                   {W.godparents.rings.title}
                 </h3>
-                <p className="font-serif text-lg text-charcoal font-medium">
+                <p className="type-body text-charcoal font-medium">
                   {W.godparents.rings.name}
                 </p>
               </div>
@@ -1003,55 +1015,55 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h3 className="font-script text-3xl sm:text-4xl text-olive leading-tight">
+            <h3 className="type-section-heading text-olive">
               Tenemos el agrado de invitarlos
             </h3>
-            <h4 className="font-script text-4xl sm:text-5xl text-olive mb-6">
+            <h4 className="type-section-subheading text-olive mb-6">
               a Nuestra Boda
             </h4>
 
             <div className="inline-flex flex-col items-center justify-center border-y border-olive/25 py-3.5 px-6 sm:px-10 my-2">
               <div className="flex items-center justify-center gap-6 sm:gap-10 font-serif text-olive">
-                <span className="text-xs sm:text-sm uppercase tracking-widest font-sans font-semibold text-muted">
+                <span className="type-kicker text-muted">
                   SÁBADO
                 </span>
-                <span className="text-4xl sm:text-5xl font-light text-charcoal leading-none">24</span>
-                <span className="text-xs sm:text-sm uppercase tracking-widest font-sans font-semibold text-muted">
+                <span className="type-countdown-number text-charcoal">24</span>
+                <span className="type-kicker text-muted">
                   OCTUBRE 2026
                 </span>
               </div>
-              <p className="font-serif text-lg sm:text-xl text-charcoal font-medium mt-2.5">
+              <p className="type-body text-charcoal font-medium mt-2.5">
                 Hora: <strong className="text-olive font-bold text-xl sm:text-2xl ml-1">{W.displayTime || "4:00 PM"}</strong>
               </p>
             </div>
 
             <div className="mt-8">
-              <h4 className="font-script text-3xl text-olive mb-3">Faltan</h4>
+              <h4 className="type-section-subheading text-olive mb-3">Faltan</h4>
               <div className="flex items-center justify-center gap-4 sm:gap-6 text-olive font-serif">
                 <div className="flex flex-col items-center">
-                  <span className="text-3xl sm:text-4xl font-light text-charcoal">{pad(countdown.d)}</span>
-                  <span className="text-[0.62rem] uppercase tracking-widest text-muted font-sans font-medium">
+                  <span className="type-countdown-number text-charcoal">{pad(countdown.d)}</span>
+                  <span className="type-meta text-muted">
                     DÍAS
                   </span>
                 </div>
                 <span className="text-xl opacity-30 font-light">:</span>
                 <div className="flex flex-col items-center">
-                  <span className="text-3xl sm:text-4xl font-light text-charcoal">{pad(countdown.h)}</span>
-                  <span className="text-[0.62rem] uppercase tracking-widest text-muted font-sans font-medium">
+                  <span className="type-countdown-number text-charcoal">{pad(countdown.h)}</span>
+                  <span className="type-meta text-muted">
                     HORAS
                   </span>
                 </div>
                 <span className="text-xl opacity-30 font-light">:</span>
                 <div className="flex flex-col items-center">
-                  <span className="text-3xl sm:text-4xl font-light text-charcoal">{pad(countdown.m)}</span>
-                  <span className="text-[0.62rem] uppercase tracking-widest text-muted font-sans font-medium">
+                  <span className="type-countdown-number text-charcoal">{pad(countdown.m)}</span>
+                  <span className="type-meta text-muted">
                     MINUTOS
                   </span>
                 </div>
                 <span className="text-xl opacity-30 font-light">:</span>
                 <div className="flex flex-col items-center">
-                  <span className="text-3xl sm:text-4xl font-light text-charcoal">{pad(countdown.s)}</span>
-                  <span className="text-[0.62rem] uppercase tracking-widest text-muted font-sans font-medium">
+                  <span className="type-countdown-number text-charcoal">{pad(countdown.s)}</span>
+                  <span className="type-meta text-muted">
                     SEGUNDOS
                   </span>
                 </div>
@@ -1076,20 +1088,20 @@ export default function App() {
               {/* Columna Ceremonia */}
               <div className="flex flex-col items-center flex-1 max-w-[190px]">
                 <ItineraryChurchSVG />
-                <h3 className="font-script text-3xl sm:text-4xl text-olive mb-1 leading-tight">
+                <h3 className="type-section-subheading text-olive mb-1">
                   {W.events[0].type}
                 </h3>
               </div>
 
               {/* Conector Y */}
-              <div className="font-script text-3xl sm:text-4xl text-terracotta px-1 -mt-2 select-none">
+              <div className="type-section-subheading text-terracotta px-1 -mt-2 select-none">
                 y
               </div>
 
               {/* Columna Recepción */}
               <div className="flex flex-col items-center flex-1 max-w-[190px]">
                 <ItineraryCocktailSVG />
-                <h3 className="font-script text-3xl sm:text-4xl text-olive mb-1 leading-tight">
+                <h3 className="type-section-subheading text-olive mb-1">
                   {W.events[1].type}
                 </h3>
               </div>
@@ -1097,7 +1109,7 @@ export default function App() {
 
             {/* Lugar común sin dirección */}
             <div className="flex flex-col items-center">
-              <p className="font-serif text-lg sm:text-xl text-charcoal font-medium mb-5">
+              <p className="type-lead text-charcoal font-medium mb-5">
                 {W.events[0].place}
               </p>
 
@@ -1106,7 +1118,7 @@ export default function App() {
                   href={W.events[0].google}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-pill-olive text-sm py-2 px-6"
+                  className="btn-pill-olive type-button py-2 px-6"
                 >
                   <MapPin size={15} />
                   <span>Ver mapa</span>
@@ -1136,37 +1148,37 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-script text-5xl text-olive mb-1">
+            <h2 className="type-section-title text-olive mb-1">
               {W.dress.title}
             </h2>
-            <span className="font-serif text-base tracking-[0.15em] font-semibold text-charcoal uppercase block mb-6">
+            <span className="type-meta text-charcoal block mb-6">
               {W.dress.type}
             </span>
 
             <div className="flex items-center justify-center gap-12 sm:gap-16 my-7">
               <div className="flex flex-col items-center">
                 <DressWomanSVG />
-                <span className="font-serif text-lg sm:text-xl font-medium text-olive mt-2.5">Damas</span>
-                <span className="font-serif text-sm sm:text-base text-charcoal mt-0.5">{W.dress.women}</span>
+                <span className="type-body text-olive font-medium mt-2.5">Damas</span>
+                <span className="type-body-small text-charcoal mt-0.5">{W.dress.women}</span>
               </div>
               <div className="h-16 w-[1px] bg-olive/20" />
               <div className="flex flex-col items-center">
                 <DressManSVG />
-                <span className="font-serif text-lg sm:text-xl font-medium text-olive mt-2.5">Caballeros</span>
-                <span className="font-serif text-sm sm:text-base text-charcoal mt-0.5">{W.dress.men}</span>
+                <span className="type-body text-olive font-medium mt-2.5">Caballeros</span>
+                <span className="type-body-small text-charcoal mt-0.5">{W.dress.men}</span>
               </div>
             </div>
 
-            <p className="font-serif italic text-sm sm:text-base text-[#555848] max-w-lg mx-auto mt-6 leading-relaxed">
+            <p className="type-body-small italic text-[#555848] max-w-lg mx-auto mt-6 leading-relaxed">
               {W.dress.note}
             </p>
 
             <div className="mt-8 pt-4">
-              <span className="font-script text-4xl sm:text-5xl text-olive block">
+              <span className="type-section-subheading text-olive block">
                 {W.dress.adultsTitle || "Solo Adultos"}
               </span>
               {W.dress.adults ? (
-                <p className="font-serif italic text-sm sm:text-base text-charcoal max-w-md mx-auto leading-relaxed mt-2">
+                <p className="type-body-small italic text-charcoal max-w-md mx-auto leading-relaxed mt-2">
                   "{W.dress.adults}"
                 </p>
               ) : null}
@@ -1185,10 +1197,10 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-script text-5xl sm:text-6xl text-olive mb-1">
+            <h2 className="type-section-title text-olive mb-1">
               Itinerario
             </h2>
-            <span className="font-sans text-xs tracking-[0.2em] text-muted uppercase font-bold block mb-8">
+            <span className="type-kicker text-muted block mb-8">
               De nuestro gran día · Juntos todo es más especial
             </span>
 
@@ -1221,13 +1233,13 @@ export default function App() {
                           {isLeft && (
                             <div className="flex flex-col items-center max-w-[190px] sm:max-w-[220px] mx-auto">
                               {renderItineraryIcon(item.type)}
-                              <span className="font-serif text-sm sm:text-base text-terracotta font-semibold tracking-wide">
+                              <span className="type-event-time text-terracotta">
                                 {item.time}
                               </span>
-                              <h3 className="font-serif text-base sm:text-lg text-[#2E3027] font-medium leading-snug mt-0.5">
+                              <h3 className="type-event-title text-[#2E3027] mt-0.5">
                                 {item.title}
                               </h3>
-                              <p className="font-serif text-xs sm:text-sm text-muted mt-0.5 leading-snug">
+                              <p className="type-event-description text-muted mt-0.5">
                                 {item.desc}
                               </p>
                             </div>
@@ -1241,13 +1253,13 @@ export default function App() {
                           {!isLeft && (
                             <div className="flex flex-col items-center max-w-[190px] sm:max-w-[220px] mx-auto">
                               {renderItineraryIcon(item.type)}
-                              <span className="font-serif text-sm sm:text-base text-terracotta font-semibold tracking-wide">
+                              <span className="type-event-time text-terracotta">
                                 {item.time}
                               </span>
-                              <h3 className="font-serif text-base sm:text-lg text-[#2E3027] font-medium leading-snug mt-0.5">
+                              <h3 className="type-event-title text-[#2E3027] mt-0.5">
                                 {item.title}
                               </h3>
-                              <p className="font-serif text-xs sm:text-sm text-muted mt-0.5 leading-snug">
+                              <p className="type-event-description text-muted mt-0.5">
                                 {item.desc}
                               </p>
                             </div>
@@ -1265,7 +1277,7 @@ export default function App() {
         </section>
 
         <section className="couple-memories" aria-labelledby="memories-title">
-          <h2 id="memories-title" className="font-script text-5xl sm:text-6xl text-olive mb-6">
+          <h2 id="memories-title" className="type-section-title text-olive mb-6">
             Nosotros
           </h2>
           <div className="couple-memories-pair">
@@ -1286,10 +1298,10 @@ export default function App() {
               decoding="async"
             />
           </div>
-          <p className="font-serif italic text-lg text-muted mt-6">
+          <p className="type-lead italic text-muted mt-6">
             {W.verse.text}.
           </p>
-          <p className="font-serif text-sm text-muted mt-1">{W.verse.ref}</p>
+          <p className="type-caption text-muted mt-1">{W.verse.ref}</p>
           <div className="editorial-divider my-8">✦</div>
         </section>
 
@@ -1302,27 +1314,27 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="font-serif text-xs tracking-[0.25em] text-terracotta uppercase font-semibold block mb-2">
+            <span className="type-kicker text-terracotta block mb-2">
               Un Detalle Especial
             </span>
-            <h2 className="font-script text-5xl sm:text-6xl text-olive mb-3">
+            <h2 className="type-section-title text-olive mb-3">
               {W.gifts.title || "Sugerencia de Regalo"}
             </h2>
 
-            <p className="font-serif italic text-base sm:text-lg text-[#555848] max-w-md mx-auto leading-relaxed mb-8">
+            <p className="type-lead italic text-[#555848] max-w-md mx-auto leading-relaxed mb-8">
               {W.gifts.intro}
             </p>
 
             {/* Dirección de obsequio físico */}
             <div className="my-6">
               <GiftsHouseSVG />
-              <p className="font-serif italic text-sm sm:text-base text-[#555848] max-w-md mx-auto mb-3 leading-relaxed">
+              <p className="type-gift-note italic text-[#555848] max-w-md mx-auto mb-3 leading-relaxed">
                 {W.gifts.homeNote}
               </p>
-              <p className="font-serif text-base sm:text-lg text-charcoal font-medium leading-snug">
+              <p className="type-body text-charcoal font-medium leading-snug">
                 Psj. Las Rosas Mz C Lt 12
               </p>
-              <p className="font-serif text-sm text-muted mt-0.5">
+              <p className="type-body-small text-muted mt-0.5">
                 Asoc. Las Begonias – Carabayllo
               </p>
             </div>
@@ -1330,34 +1342,34 @@ export default function App() {
             {/* Transferencias / Cuentas digitales */}
             <div className="my-8">
               <GiftsPhoneSVG />
-              <p className="font-serif italic text-sm sm:text-base text-[#555848] max-w-md mx-auto mb-6 leading-relaxed">
+              <p className="type-gift-note italic text-[#555848] max-w-md mx-auto mb-6 leading-relaxed">
                 {W.gifts.accountNote}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 my-2">
                 {/* Columna BCP */}
                 <div>
-                  <h4 className="font-serif text-base sm:text-lg text-olive font-semibold mb-0.5">
+                  <h4 className="type-card-title text-olive mb-0.5">
                     BCP – Soles
                   </h4>
-                  <p className="font-serif text-sm text-charcoal">
+                  <p className="type-body-small text-charcoal">
                     Yuleisi Paola Diaz Vergaray
                   </p>
-                  <p className="font-mono text-xs sm:text-sm text-charcoal mt-1 flex items-center justify-center gap-1.5">
+                  <p className="type-account text-charcoal mt-1 flex items-center justify-center gap-1.5">
                     <span>Cuenta: <strong>19197570498056</strong></span>
                     <button
                       onClick={() => copyToClipboard("19197570498056", "BCP")}
-                      className="text-terracotta hover:scale-115 transition-transform p-0.5 cursor-pointer"
+                      className="icon-button text-terracotta hover:scale-105 transition-transform cursor-pointer"
                       title="Copiar número de cuenta"
                     >
                       <Copy size={12} />
                     </button>
                   </p>
-                  <p className="font-mono text-[0.7rem] text-muted mt-0.5 flex items-center justify-center gap-1.5">
+                  <p className="type-account text-muted mt-0.5 flex items-center justify-center gap-1.5">
                     <span>CCI: <strong>00219119757049805656</strong></span>
                     <button
                       onClick={() => copyToClipboard("00219119757049805656", "CCI")}
-                      className="text-terracotta hover:scale-115 transition-transform p-0.5 cursor-pointer"
+                      className="icon-button text-terracotta hover:scale-105 transition-transform cursor-pointer"
                       title="Copiar CCI"
                     >
                       <Copy size={11} />
@@ -1367,17 +1379,17 @@ export default function App() {
 
                 {/* Columna Yape */}
                 <div>
-                  <h4 className="font-serif text-base sm:text-lg text-olive font-semibold mb-0.5">
+                  <h4 className="type-card-title text-olive mb-0.5">
                     Yape
                   </h4>
-                  <p className="font-serif text-sm text-charcoal">
+                  <p className="type-body-small text-charcoal">
                     Yuleisi Paola Diaz Vergaray
                   </p>
-                  <p className="font-mono text-base text-charcoal mt-2 flex items-center justify-center gap-1.5">
+                  <p className="type-account text-charcoal mt-2 flex items-center justify-center gap-1.5">
                     <strong>987 147 762</strong>
                     <button
                       onClick={() => copyToClipboard("987147762", "Yape")}
-                      className="text-terracotta hover:scale-115 transition-transform p-0.5 cursor-pointer"
+                      className="icon-button text-terracotta hover:scale-105 transition-transform cursor-pointer"
                       title="Copiar número Yape"
                     >
                       <Copy size={13} />
@@ -1392,10 +1404,10 @@ export default function App() {
 
             {/* Agradecimiento */}
             <div>
-              <h3 className="font-script text-4xl sm:text-5xl text-olive mb-1">
+              <h3 className="type-section-subheading text-olive mb-1">
                 ¡Gracias!
               </h3>
-              <p className="font-serif italic text-sm sm:text-base text-muted max-w-sm mx-auto">
+              <p className="type-body-small italic text-muted max-w-sm mx-auto">
                 Por ser parte de esta historia tan especial.
               </p>
             </div>
@@ -1414,21 +1426,21 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-script text-4xl sm:text-5xl text-olive mb-2">
+            <h2 className="type-section-title text-olive mb-2">
               Confirmación de asistencia
             </h2>
-            <p className="font-serif text-base sm:text-lg text-charcoal max-w-md mx-auto mb-8 leading-relaxed">
+            <p className="type-lead text-charcoal max-w-md mx-auto mb-8 leading-relaxed">
               Tu presencia es muy importante para nosotros. Por favor, confírmanos tu asistencia antes del 30 de setiembre de 2026.
             </p>
 
             <div className="space-y-6 text-left">
               {/* 1. Selección Asistir / No Asistir */}
               <div>
-                <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold mb-2.5">
+                <label className="type-kicker text-muted block mb-2.5">
                   ¿Nos acompañarás en nuestro día? *
                 </label>
-                <div className="space-y-2 font-serif text-base text-charcoal">
-                  <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
+                <div className="space-y-2 type-body text-charcoal">
+                  <label className="rsvp-option flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
                     <input
                       type="radio"
                       name="asistencia"
@@ -1439,7 +1451,7 @@ export default function App() {
                     />
                     <span>¡Sí, con mucho gusto asistiré!</span>
                   </label>
-                  <label className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
+                  <label className="rsvp-option flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-olive/5 transition-colors">
                     <input
                       type="radio"
                       name="asistencia"
@@ -1456,7 +1468,7 @@ export default function App() {
               {/* 2. Si ASISTE: Cuadro grande para nombres */}
               {attending === "si" && (
                 <div className="space-y-2 pt-1">
-                  <label className="block font-sans text-xs uppercase tracking-wider text-muted font-bold">
+                  <label className="type-kicker text-muted block">
                     Nombre y apellidos de los asistentes *
                   </label>
                   <textarea
@@ -1464,14 +1476,14 @@ export default function App() {
                     value={guestNames}
                     onChange={(e) => setGuestNames(e.target.value)}
                     placeholder="Escribe aquí los nombres y apellidos de las personas que asistirán..."
-                    className="w-full bg-transparent border border-olive/35 focus:border-olive rounded-xl p-3.5 font-serif text-base text-charcoal outline-none transition-colors resize-none placeholder:italic placeholder:text-muted/60"
+                    className="w-full bg-transparent border border-olive/35 focus:border-olive rounded-xl p-3.5 type-body text-charcoal outline-none transition-colors resize-none placeholder:italic placeholder:text-muted/60"
                   />
                 </div>
               )}
 
               {/* 3. Botones de WhatsApp para Novia y Novio */}
               <div className="pt-2 space-y-3">
-                <p className="font-sans text-[0.72rem] uppercase tracking-wider text-muted font-bold text-center">
+                <p className="type-kicker text-muted text-center">
                   Enviar confirmación por WhatsApp a:
                 </p>
 
@@ -1479,7 +1491,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => sendWhatsApp("novia")}
-                    className="btn-pill-olive w-full sm:flex-1 text-sm sm:text-base py-3 px-4 justify-center gap-2.5 shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer"
+                    className="btn-pill-olive type-button w-full sm:flex-1 py-3 px-4 justify-center gap-2.5 shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer"
                   >
                     <WhatsAppIcon size={19} />
                     <span>WhatsApp Novia</span>
@@ -1492,7 +1504,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => sendWhatsApp("novio")}
-                    className="btn-pill-olive w-full sm:flex-1 text-sm sm:text-base py-3 px-4 justify-center gap-2.5 shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer bg-[#4F553B]"
+                    className="btn-pill-olive type-button w-full sm:flex-1 py-3 px-4 justify-center gap-2.5 shadow-md hover:scale-102 active:scale-98 transition-all cursor-pointer bg-[#4F553B]"
                   >
                     <WhatsAppIcon size={19} />
                     <span>WhatsApp Novio</span>
@@ -1524,20 +1536,20 @@ export default function App() {
           >
             <MonogramWreath initials={W.monogram} />
 
-            <p className="font-serif italic text-base text-[#555848] leading-relaxed max-w-sm mx-auto mt-4 mb-3">
+            <p className="type-lead italic text-[#555848] leading-relaxed max-w-sm mx-auto mt-4 mb-3">
               "{W.closing}"
             </p>
 
-            <h3 className="font-script text-5xl sm:text-6xl text-olive mb-6">
+            <h3 className="type-section-title text-olive mb-6">
               ¡Te esperamos!
             </h3>
 
             <BotanicalBranch />
 
-            <div className="font-serif text-xs tracking-widest uppercase text-terracotta font-semibold mt-4">
+            <div className="type-kicker text-terracotta mt-4">
               {W.hashtag}
             </div>
-            <p className="font-sans text-[0.62rem] text-muted tracking-wider mt-1">
+            <p className="type-caption text-muted mt-1">
               © 2026 Con amor para todos nuestros seres queridos.
             </p>
           </motion.div>
