@@ -119,7 +119,7 @@ export const wedding = {
     accountNote: "También dejamos disponibles estas opciones para quienes prefieran hacerlo de manera digital:",
     accounts: [
       {
-        bank: "BCP – Soles",
+        bank: "BCP",
         holder: "Yuleisi Paola Diaz Vergaray",
         account: "19197570498056",
         cci: "00219119757049805656",

@@ -1350,7 +1350,7 @@ export default function App() {
                 {/* Columna BCP */}
                 <div>
                   <h4 className="type-card-title text-olive mb-0.5">
-                    BCP – Soles
+                    BCP
                   </h4>
                   <p className="type-body-small text-charcoal">
                     Yuleisi Paola Diaz Vergaray
