@@ -1355,7 +1355,7 @@ export default function App() {
                   <p className="type-body-small text-charcoal">
                     Yuleisi Paola Diaz Vergaray
                   </p>
-                  <p className="type-account text-charcoal mt-1 flex items-center justify-center gap-1.5">
+                  <p className="type-account-row type-account text-charcoal mt-1">
                     <span>Cuenta: <strong>19197570498056</strong></span>
                     <button
                       onClick={() => copyToClipboard("19197570498056", "BCP")}
@@ -1365,7 +1365,7 @@ export default function App() {
                       <Copy size={12} />
                     </button>
                   </p>
-                  <p className="type-account text-muted mt-0.5 flex items-center justify-center gap-1.5">
+                  <p className="type-account-row type-account text-muted mt-0.5">
                     <span>CCI: <strong>00219119757049805656</strong></span>
                     <button
                       onClick={() => copyToClipboard("00219119757049805656", "CCI")}
@@ -1385,7 +1385,7 @@ export default function App() {
                   <p className="type-body-small text-charcoal">
                     Yuleisi Paola Diaz Vergaray
                   </p>
-                  <p className="type-account text-charcoal mt-2 flex items-center justify-center gap-1.5">
+                  <p className="type-account-row type-account text-charcoal mt-2">
                     <strong>987 147 762</strong>
                     <button
                       onClick={() => copyToClipboard("987147762", "Yape")}
