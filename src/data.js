@@ -36,6 +36,7 @@ export const wedding = {
       mother: "María Vergaray Villanueva",
     },
     groom: {
+      aunt: "Margarita Samame Morales",
       father: "Anselmo Samame Paredes",
       mother: "Rosa Morales Ramirez",
       motherDeceased: true,

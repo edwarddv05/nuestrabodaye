@@ -980,6 +980,13 @@ export default function App() {
                 <h3 className="type-kicker text-muted mb-2">
                   Padres del Novio
                 </h3>
+                {W.parents.groom.aunt && (
+                  <p className="type-body text-charcoal leading-snug flex items-center justify-center">
+                    <span>
+                      {W.parents.groom.aunt} <em>(Tía)</em>
+                    </span>
+                  </p>
+                )}
                 <p className="type-body text-charcoal leading-snug flex items-center justify-center">
                   <span>{W.parents.groom.father}</span>
                   {W.parents.groom.fatherDeceased && <MemorialDoveSVG />}
