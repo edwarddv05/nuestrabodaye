@@ -74,16 +74,14 @@ export function WaxSeal({ id }) {
           filter={url("inner")}
         />
       </g>
-      <circle cx="50" cy="50.5" r="25.8" fill="none" stroke="rgba(255, 215, 185, 0.3)" strokeWidth="0.6" />
-      <circle cx="50" cy="50" r="25.8" fill="none" stroke="rgba(100, 40, 14, 0.4)" strokeWidth="0.6" />
-
-      {/* Iniciales en relieve pintadas en marfil, dentro del anillo con aire
-          alrededor. Relieve en tres capas: sombra proyectada abajo-derecha,
-          filo de luz arriba-izquierda y la letra con degradado de volumen */}
-      <g className="wax-monogram" fontSize="14.5" textAnchor="middle">
-        <text x="50.9" y="55.9" fill="rgba(60, 20, 4, 0.75)" stroke="rgba(60, 20, 4, 0.75)" strokeWidth="0.5">Y &amp; E</text>
-        <text x="49.55" y="54.55" fill="rgba(255, 248, 236, 0.95)" stroke="rgba(255, 248, 236, 0.95)" strokeWidth="0.3">Y &amp; E</text>
-        <text x="50" y="55" fill={url("ivory")} stroke={url("ivory")} strokeWidth="0.3">Y &amp; E</text>
+      {/* Iniciales en relieve pintadas en marfil. A tamaño real el disco mide
+          ~60px, así que van grandes, juntas ("Y&E") y con trazo engrosado para
+          que la cursiva fina se lea; relieve: sombra nítida abajo-derecha y
+          filo de luz sutil arriba-izquierda */}
+      <g className="wax-monogram" fontSize="20" textAnchor="middle" strokeLinejoin="round">
+        <text x="49.5" y="57.4" fill="rgba(55, 18, 4, 0.8)" stroke="rgba(55, 18, 4, 0.8)" strokeWidth="0.9">Y&amp;E</text>
+        <text x="48.2" y="56.1" fill="rgba(255, 248, 236, 0.6)" stroke="rgba(255, 248, 236, 0.6)" strokeWidth="0.7">Y&amp;E</text>
+        <text x="48.6" y="56.5" fill={url("ivory")} stroke={url("ivory")} strokeWidth="0.7">Y&amp;E</text>
       </g>
 
       {/* Brillos de la cera */}

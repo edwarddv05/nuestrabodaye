@@ -13,9 +13,9 @@ export function MusicPill({ audio }) {
         aria-label={audio.playing ? "Pausar nuestra canción" : "Reproducir nuestra canción"}
       >
         {audio.playing ? (
-          <Pause size={17} fill="currentColor" />
+          <Pause size={14} fill="currentColor" strokeWidth={1.5} />
         ) : (
-          <Play size={17} fill="currentColor" className="ml-0.5" />
+          <Play size={14} fill="currentColor" strokeWidth={1.5} className="ml-0.5" />
         )}
       </button>
       <div className="music-pill-info">

@@ -149,7 +149,13 @@ export function EnvelopeModal({ onEnter }) {
           </div>
 
           {/* Solapa superior abatible (debajo del sello de cera) */}
-          <div className="env-top"><div className="flap-face" /></div>
+          <div className="env-top">
+            <div className="flap-face" />
+            {/* Mitad superior del sello: pegada a la solapa, gira con ella */}
+            <div className="seal-on-flap" aria-hidden="true">
+              <span className="seal-piece seal-top"><WaxSeal id="seal-t" /></span>
+            </div>
+          </div>
 
           {/* Sello de cera: se parte en dos al abrir */}
           {/* Sin onClick propio: el clic (o Enter/Espacio) sube hasta .env-wrap */}
@@ -160,8 +166,9 @@ export function EnvelopeModal({ onEnter }) {
             aria-expanded={isOpen}
             disabled={isOpen}
           >
-            <span className="seal-half seal-left"><WaxSeal id="seal-l" /></span>
-            <span className="seal-half seal-right"><WaxSeal id="seal-r" /></span>
+            {/* Entero mientras está cerrado; al partirse queda la mitad inferior */}
+            <span className="seal-piece seal-whole"><WaxSeal id="seal-w" /></span>
+            <span className="seal-piece seal-bottom"><WaxSeal id="seal-b" /></span>
           </button>
         </div>
 

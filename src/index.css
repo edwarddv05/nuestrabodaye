@@ -506,35 +506,65 @@
 }
 
 /* ═══ Reproductor compacto de la portada ═══ */
+/* Sin caja: el reproductor va sobre el papel como un detalle tipográfico más */
 .music-pill {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: min(100%, 300px);
+  gap: 14px;
+  width: min(100%, 270px);
   margin: 0 auto;
-  padding: 6px 16px 6px 6px;
-  border: 1px solid rgba(89, 95, 67, 0.22);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.45);
   text-align: left;
 }
 
+/* Botón de línea fina, como los iconos del itinerario */
 .music-pill-play {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--olive);
-  color: var(--cream);
+  border: 1px solid rgba(89, 95, 67, 0.55);
+  background: transparent;
+  color: var(--olive);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.music-pill-play:hover { background: var(--olive-dark); }
+.music-pill-play:hover {
+  background: rgba(89, 95, 67, 0.07);
+  border-color: var(--olive);
+}
+
 .music-pill-play:active { transform: scale(0.95); }
+
+/* Progreso como un filete de 1px (sin tirador); la zona táctil sigue siendo alta */
+.music-pill .song-progress {
+  height: 22px;
+  margin: 2px 0 0;
+  background: linear-gradient(to right, var(--olive) 0 var(--song-progress), rgba(89, 95, 67, 0.2) var(--song-progress) 100%) center / 100% 1px no-repeat;
+}
+
+.music-pill .song-progress::-webkit-slider-thumb {
+  width: 7px;
+  height: 7px;
+  margin-top: -3px;
+  border: 0;
+  background: var(--olive);
+  box-shadow: none;
+}
+
+.music-pill .song-progress::-moz-range-thumb {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  background: var(--olive);
+  box-shadow: none;
+}
+
+.music-pill .song-progress::-webkit-slider-runnable-track { height: 1px; }
+.music-pill .song-progress::-moz-range-track { height: 1px; }
 
 .music-pill-info {
   flex: 1;
@@ -547,11 +577,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.music-pill .song-progress {
-  height: 24px;
-  margin: 0;
 }
 
 /* ═══ Botón de copiar cuenta (con estado "Copiado") ═══ */
@@ -1100,15 +1125,15 @@
 }
 
 /* ═══════════════════════════════════════════════════════
-   SELLO DE CERA (SE PARTE EN DOS AL ABRIR)
+   SELLO DE CERA (SE PARTE: MEDIA SUBE CON LA SOLAPA, MEDIA CAE)
    ═══════════════════════════════════════════════════════ */
 .wax-seal-btn {
   position: absolute;
-  top: calc(var(--env-h) * 0.52 - 48px);
+  top: calc(var(--env-h) * 0.52 - 54px);
   left: 50%;
-  width: 96px;
-  height: 96px;
-  margin-left: -48px;
+  width: 108px;
+  height: 108px;
+  margin-left: -54px;
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -1172,19 +1197,10 @@
   100% { transform: scale(1); }
 }
 
-.is-open .seal-half {
-  transition:
-    transform 0.6s cubic-bezier(0.3, 0.7, 0.3, 1) 0.16s,
-    opacity 0.45s ease 0.3s;
-}
-
-/* Cada mitad contiene el sello SVG completo (WaxSeal en App.jsx) */
-.seal-half {
+/* Cada pieza contiene el sello SVG completo (WaxSeal); se recorta con clip-path */
+.seal-piece {
   position: absolute;
   inset: 0;
-  transition:
-    transform 0.6s cubic-bezier(0.3, 0.7, 0.3, 1),
-    opacity 0.45s ease 0.15s;
 }
 
 .wax-seal-svg {
@@ -1198,23 +1214,73 @@
   font-family: var(--font-script);
 }
 
-/* Cerrado: solo se ve la mitad izquierda sin recortar (sello entero, sin costura).
-   Al abrir, ambas mitades se recortan por una grieta irregular y caen. */
-.seal-right {
+/*
+ * Rotura en horizontal (como al abrir un sobre lacrado de verdad):
+ *  - Cerrado: solo se ve el sello entero (.seal-whole), sin costuras.
+ *  - 0.22s (tras el golpe): se cambia a dos mitades por una grieta en zigzag.
+ *    La de arriba (.seal-top) va dentro de la solapa y gira con ella; cuando la
+ *    solapa pasa de canto (≈0.47s) queda por la cara de fuera y deja de verse.
+ *    La de abajo (.seal-bottom) sigue pegada al sobre y se va con él.
+ */
+.seal-top {
+  clip-path: polygon(0 0, 100% 0, 100% 53%, 84% 49%, 68% 55%, 52% 48%, 35% 54%, 18% 47%, 0 52%);
+}
+
+.seal-bottom {
+  clip-path: polygon(0 52%, 18% 47%, 35% 54%, 52% 48%, 68% 55%, 84% 49%, 100% 53%, 100% 100%, 0 100%);
+}
+
+.seal-bottom,
+.seal-on-flap {
   visibility: hidden;
 }
 
-.is-open .seal-left {
-  clip-path: polygon(0 0, 53% 0, 47% 27%, 55% 50%, 46% 73%, 52% 100%, 0 100%);
-  transform: translate(-22px, 30px) rotate(-28deg);
-  opacity: 0;
+.is-open .seal-whole {
+  visibility: hidden;
+  transition: visibility 0s linear 0.22s;
 }
 
-.is-open .seal-right {
+/* Aparece al partirse y se queda pegada a la solapa de delante: baja con el
+   sobre mientras sale la carta y se desvanece con él (mismas curvas que
+   .env-piece) */
+.is-open .seal-bottom {
   visibility: visible;
-  clip-path: polygon(53% 0, 100% 0, 100% 100%, 52% 100%, 46% 73%, 55% 50%, 47% 27%);
-  transform: translate(22px, 36px) rotate(24deg);
+  transition:
+    visibility 0s linear 0.22s,
+    transform var(--extract),
+    opacity 0.6s ease;
+}
+
+.is-extracting .seal-bottom {
+  transform: translateY(var(--drop));
+}
+
+.is-presented .seal-bottom {
+  transform: translateY(calc(var(--drop) + 50px));
   opacity: 0;
+  transition: transform 0.8s var(--ease-soft), opacity 0.6s ease;
+}
+
+/* Media sello pegado a la punta de la solapa (mismas coordenadas que el botón) */
+.seal-on-flap {
+  position: absolute;
+  top: calc(var(--env-h) * 0.52 - 54px);
+  left: 50%;
+  width: 108px;
+  height: 108px;
+  margin-left: -54px;
+  pointer-events: none;
+  filter:
+    drop-shadow(0 2px 2px rgba(92, 36, 10, 0.35))
+    drop-shadow(0 7px 12px rgba(142, 68, 27, 0.28));
+}
+
+.is-open .seal-on-flap {
+  visibility: visible;
+  opacity: 0;
+  transition:
+    visibility 0s linear 0.22s,
+    opacity 0s linear 0.47s;
 }
 
 /* Indicación bajo el sobre */
