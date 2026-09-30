@@ -32,7 +32,7 @@ export default function App() {
       <FloatingAudioButton audio={music} />
       <Toast message={message} />
 
-      <div className="min-h-screen bg-[#FAF7F2] text-[#2E3027] pb-24">
+      <div className="site-content min-h-screen bg-[#FAF7F2] text-[#2E3027] pb-24">
         <Hero audio={music} entered={entered} />
         <Parents />
         <DateCountdown />

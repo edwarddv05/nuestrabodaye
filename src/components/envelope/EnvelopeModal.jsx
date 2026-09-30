@@ -53,12 +53,15 @@ export function EnvelopeModal({ onEnter }) {
       ) * 1.15;
       screenRef.current.style.setProperty("--fill", fill.toFixed(2));
     }
+    // La web vuelve a verse justo cuando el sobre empieza a desvanecerse
+    document.documentElement.classList.remove("env-covering");
     // La música arranca dentro del clic para respetar las políticas de autoplay.
     onEnter();
     setPhase("leaving");
     later(() => {
       document.documentElement.classList.remove("lock");
       document.body.classList.remove("lock");
+      document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FAF7F2");
       setPhase("done");
     }, ENVELOPE_TIMING.leave);
   };
