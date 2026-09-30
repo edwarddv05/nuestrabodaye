@@ -11,16 +11,17 @@ const heroDate = [W.date.getDate(), month, W.date.getFullYear()];
 /* ═══════════════════════════════════════════════════
    PORTADA: NOMBRES, CANCIÓN Y PRIMERA FOTO
    ═══════════════════════════════════════════════════ */
-export function Hero({ audio }) {
+export function Hero({ audio, entered }) {
   return (
     <>
       <header className="pt-12 sm:pt-16 pb-6 text-center max-w-xl mx-auto px-5">
+        {/* Entra mientras el sobre se desvanece (sale ~0.5s después del clic) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          animate={entered ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.8, delay: 0.45 }}
         >
-          <BotanicalBranch />
+          <BotanicalBranch play={entered} />
 
           <p className="type-hero-kicker text-olive">El inicio de una vida juntos</p>
 
@@ -45,6 +46,7 @@ export function Hero({ audio }) {
 
       {/* .couple-cover recorta a 1:1 y amplía ×1.18 en móvil: por eso pide más ancho */}
       <TornPhoto
+        play={entered}
         name="portada"
         widths={[640, 1280]}
         sizes="(max-width: 640px) 180vw, 672px"

@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll } from "motion/react";
 import { Heart } from "lucide-react";
 import { wedding as W } from "../data";
 import { ItineraryIcon } from "../components/Icons";
@@ -14,19 +16,43 @@ function ItineraryEntry({ item }) {
   );
 }
 
+// El corazón "se enciende" cuando la línea llega a su altura (~62% de la pantalla)
 function TimelineDot() {
+  const reduced = useReducedMotion();
   return (
-    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#595F43] text-[#FAF7F2] flex items-center justify-center shadow-xs">
+    <motion.div
+      initial={reduced ? false : { scale: 0.55, opacity: 0.35 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      viewport={{ once: true, margin: "0px 0px -38% 0px" }}
+      transition={{ type: "spring", stiffness: 320, damping: 18 }}
+      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#595F43] text-[#FAF7F2] flex items-center justify-center shadow-xs"
+    >
       <Heart size={13} fill="currentColor" />
+    </motion.div>
+  );
+}
+
+// Línea que se va rellenando al bajar: base tenue + trazo oliva que crece
+function ProgressLine({ targetRef, className }) {
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start 62%", "end 62%"] });
+  return (
+    <div className={className} aria-hidden="true">
+      <div className="absolute inset-0 bg-[#595F43] opacity-20" />
+      <motion.div
+        className="absolute inset-0 bg-[#595F43] opacity-75 origin-top"
+        style={{ scaleY: reduced ? 1 : scrollYProgress }}
+      />
     </div>
   );
 }
 
 // Móvil: línea a la izquierda y cada evento a todo el ancho (se lee de corrido)
 function MobileTimeline() {
+  const ref = useRef(null);
   return (
-    <div className="sm:hidden relative max-w-sm mx-auto text-left">
-      <div className="absolute left-[13px] top-4 bottom-4 w-[2px] bg-[#595F43] opacity-65" aria-hidden="true" />
+    <div ref={ref} className="sm:hidden relative max-w-sm mx-auto text-left">
+      <ProgressLine targetRef={ref} className="absolute left-[13px] top-4 bottom-4 w-[2px]" />
       <ol>
         {W.itinerary.map((item) => (
           <Reveal as="li" key={item.title} className="relative flex items-start gap-4 pb-7 last:pb-0">
@@ -50,12 +76,10 @@ function MobileTimeline() {
 
 // Pantallas grandes: línea central y eventos alternados
 function DesktopTimeline() {
+  const ref = useRef(null);
   return (
-    <div className="hidden sm:block relative max-w-lg mx-auto py-2">
-      <div
-        className="absolute left-1/2 -translate-x-1/2 top-3 bottom-3 w-[2px] bg-[#595F43]"
-        style={{ opacity: 0.65 }}
-      />
+    <div ref={ref} className="hidden sm:block relative max-w-lg mx-auto py-2">
+      <ProgressLine targetRef={ref} className="absolute left-1/2 -translate-x-1/2 top-3 bottom-3 w-[2px]" />
       <div className="space-y-7">
         {W.itinerary.map((item, idx) => {
           const isLeft = idx % 2 === 0;
