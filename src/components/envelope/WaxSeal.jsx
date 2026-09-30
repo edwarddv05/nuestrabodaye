@@ -39,6 +39,12 @@ export function WaxSeal({ id }) {
         <filter id={`${id}-inner`} x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="1.7" />
         </filter>
+        {/* Pintura marfil con volumen: más clara arriba, dorada abajo */}
+        <linearGradient id={`${id}-ivory`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FFF6E6" />
+          <stop offset="55%" stopColor="#F4DFC0" />
+          <stop offset="100%" stopColor="#DDBB8E" />
+        </linearGradient>
         <clipPath id={`${id}-faceclip`}>
           <circle cx="50" cy="50" r="29" />
         </clipPath>
@@ -71,11 +77,13 @@ export function WaxSeal({ id }) {
       <circle cx="50" cy="50.5" r="25.8" fill="none" stroke="rgba(255, 215, 185, 0.3)" strokeWidth="0.6" />
       <circle cx="50" cy="50" r="25.8" fill="none" stroke="rgba(100, 40, 14, 0.4)" strokeWidth="0.6" />
 
-      {/* Iniciales pintadas en marfil (--ivory) sobre el relieve, como la
-          pintura de los sellos de lacre; sombra fina para que asienten */}
-      <g className="wax-monogram" fontSize="18" textAnchor="middle">
-        <text x="50.7" y="56.8" fill="rgba(70, 24, 6, 0.7)">Y &amp; E</text>
-        <text x="50" y="56" fill="#F7E7CD" stroke="#F7E7CD" strokeWidth="0.35">Y &amp; E</text>
+      {/* Iniciales en relieve pintadas en marfil, dentro del anillo con aire
+          alrededor. Relieve en tres capas: sombra proyectada abajo-derecha,
+          filo de luz arriba-izquierda y la letra con degradado de volumen */}
+      <g className="wax-monogram" fontSize="14.5" textAnchor="middle">
+        <text x="50.9" y="55.9" fill="rgba(60, 20, 4, 0.75)" stroke="rgba(60, 20, 4, 0.75)" strokeWidth="0.5">Y &amp; E</text>
+        <text x="49.55" y="54.55" fill="rgba(255, 248, 236, 0.95)" stroke="rgba(255, 248, 236, 0.95)" strokeWidth="0.3">Y &amp; E</text>
+        <text x="50" y="55" fill={url("ivory")} stroke={url("ivory")} strokeWidth="0.3">Y &amp; E</text>
       </g>
 
       {/* Brillos de la cera */}
