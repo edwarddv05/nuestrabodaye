@@ -28,13 +28,20 @@ export function WaxSeal({ id }) {
           <stop offset="50%" stopColor="#B4663A" />
           <stop offset="100%" stopColor="#E09868" />
         </linearGradient>
-        <radialGradient id={`${id}-face`} cx="45%" cy="40%" r="65%">
-          <stop offset="0%" stopColor="#D2855A" />
-          <stop offset="100%" stopColor="#B8683A" />
+        {/* Fondo del hundido: algo más oscuro que la cera (le llega menos luz) */}
+        <radialGradient id={`${id}-face`} cx="55%" cy="58%" r="65%">
+          <stop offset="0%" stopColor="#C4743F" />
+          <stop offset="100%" stopColor="#A8592C" />
         </radialGradient>
         <filter id={`${id}-soft`} x="-10%" y="-10%" width="120%" height="120%">
           <feGaussianBlur stdDeviation="0.45" />
         </filter>
+        <filter id={`${id}-inner`} x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="1.7" />
+        </filter>
+        <clipPath id={`${id}-faceclip`}>
+          <circle cx="50" cy="50" r="29" />
+        </clipPath>
       </defs>
 
       {/* Cera derramada y su canto */}
@@ -43,15 +50,31 @@ export function WaxSeal({ id }) {
 
       {/* Reborde, pared y disco estampado */}
       <circle cx="50" cy="50" r="35" fill={url("rim")} />
-      <circle cx="50" cy="50" r="31.6" fill={url("wall")} />
-      <circle cx="50" cy="50" r="29.8" fill={url("face")} />
-      <circle cx="50" cy="50.5" r="26.6" fill="none" stroke="rgba(255, 215, 185, 0.35)" strokeWidth="0.6" />
-      <circle cx="50" cy="50" r="26.6" fill="none" stroke="rgba(120, 50, 20, 0.4)" strokeWidth="0.6" />
+      <circle cx="50" cy="50" r="32.2" fill={url("wall")} />
+      <circle cx="50" cy="50" r="29" fill={url("face")} />
+
+      {/* Profundidad del hundido: el reborde tapa la luz (que viene de arriba
+          a la izquierda) y deja una sombra interior en ese lado; en el lado
+          opuesto la pared iluminada devuelve un reflejo suave */}
+      <g clipPath={url("faceclip")}>
+        <circle
+          cx="51.6" cy="52" r="31"
+          fill="none" stroke="rgba(55, 18, 4, 0.62)" strokeWidth="7"
+          filter={url("inner")}
+        />
+        <circle
+          cx="48.8" cy="48.6" r="30.6"
+          fill="none" stroke="rgba(255, 210, 175, 0.32)" strokeWidth="3.5"
+          filter={url("inner")}
+        />
+      </g>
+      <circle cx="50" cy="50.5" r="25.8" fill="none" stroke="rgba(255, 215, 185, 0.3)" strokeWidth="0.6" />
+      <circle cx="50" cy="50" r="25.8" fill="none" stroke="rgba(100, 40, 14, 0.4)" strokeWidth="0.6" />
 
       {/* Iniciales pintadas en marfil (--ivory) sobre el relieve, como la
           pintura de los sellos de lacre; sombra fina para que asienten */}
       <g className="wax-monogram" fontSize="18" textAnchor="middle">
-        <text x="50.6" y="56.6" fill="rgba(90, 32, 8, 0.6)">Y &amp; E</text>
+        <text x="50.7" y="56.8" fill="rgba(70, 24, 6, 0.7)">Y &amp; E</text>
         <text x="50" y="56" fill="#F7E7CD" stroke="#F7E7CD" strokeWidth="0.35">Y &amp; E</text>
       </g>
 
