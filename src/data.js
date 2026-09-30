@@ -5,9 +5,8 @@ export const wedding = {
   hashtag: "#BodaYuleisiYElder",
   title: "NUESTRA BODA",
   date: new Date(2026, 9, 24, 16, 0, 0),
-  displayDate: "Sábado, 24 de Octubre de 2026",
-  displayTime: "4:00 PM",
-  city: "Lurigancho-Chosica, Lima",
+  displayTime: "4:00 p. m.",
+  rsvpDeadline: "7 de octubre de 2026",
   quote: "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que quieres, los convierte en momentos inolvidables.",
   verse: {
     text: "Todo lo hizo hermoso en su tiempo",
@@ -22,12 +21,10 @@ export const wedding = {
     bride: {
       name: "Yuleisi",
       phone: "51987147762",
-      displayPhone: "+51 987 147 762",
     },
     groom: {
       name: "Elder",
       phone: "51914854112",
-      displayPhone: "+51 914 854 112",
     },
   },
   parents: {
@@ -45,23 +42,15 @@ export const wedding = {
   events: [
     {
       type: "Ceremonia Religiosa",
-      time: "4:30 PM",
       place: "El Gran Jardín Casa de Eventos",
       address: "Las Golondrinas 259, Lurigancho-Chosica, Lima 15457",
       google: "https://maps.app.goo.gl/8SQkrRxyt5BcNZ8m7",
-      apple: "https://maps.apple.com/?q=El+Gran+Jardin+Casa+de+Eventos&ll=-12.0157098,-76.9447434",
-      img: "rings.png",
-      icon: "church",
     },
     {
       type: "Recepción",
-      time: "6:30 PM",
       place: "El Gran Jardín Casa de Eventos",
       address: "Las Golondrinas 259, Lurigancho-Chosica, Lima 15457",
       google: "https://maps.app.goo.gl/8SQkrRxyt5BcNZ8m7",
-      apple: "https://maps.apple.com/?q=El+Gran+Jardin+Casa+de+Eventos&ll=-12.0157098,-76.9447434",
-      img: "venue.png",
-      icon: "gazebo",
     },
   ],
   dress: {
@@ -108,15 +97,11 @@ export const wedding = {
   gifts: {
     title: "Sugerencia de Regalo",
     intro: "Compartir este día con ustedes ya es muy especial para nosotros. Si desean tener un detalle, lo recibiremos con mucho cariño y gratitud.",
-    homeTitle: "Obsequio en Dirección",
     homeNote: "Si desean enviarnos un obsequio, compartimos nuestra dirección:",
-    homes: [
-      {
-        name: "Dirección de Recepción de Regalos",
-        address: "Psj. Las Rosas Mz C Lt 12, Asoc. Las Begonias – Carabayllo",
-      },
-    ],
-    accountTitle: "Transferencia / Cuentas",
+    home: {
+      line1: "Psj. Las Rosas Mz C Lt 12",
+      line2: "Asoc. Las Begonias – Carabayllo",
+    },
     accountNote: "También dejamos disponibles estas opciones para quienes prefieran hacerlo de manera digital:",
     accounts: [
       {
@@ -132,7 +117,6 @@ export const wedding = {
         cci: "",
       },
     ],
-    closing: "¡Gracias por ser parte de esta historia tan especial!",
   },
   closing: "Con mucha ilusión queremos vivir este momento rodeados de personas que han formado parte de nuestra historia. Será un honor contar con tu presencia.",
 };

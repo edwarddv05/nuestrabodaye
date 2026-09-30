@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Colores de la paleta disponibles como utilidades de Tailwind
+   (border-olive/25, bg-olive/20, fill-terracotta, text-muted/60…) */
+@theme {
+  --color-olive: #595F43;
+  --color-terracotta: #CA7C4B;
+  --color-charcoal: #2E3027;
+  --color-muted: #666A59;
+}
+
 @layer base {
   :root {
     --olive: #595F43;
@@ -15,7 +24,6 @@
 
     --font-script: 'Alex Brush', cursive;
     --font-serif: 'Cormorant Garamond', Georgia, serif;
-    --font-display: 'Playfair Display', serif;
     --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
@@ -43,7 +51,6 @@
 /* Typography Utility Classes */
 .font-script { font-family: var(--font-script); }
 .font-serif { font-family: var(--font-serif); }
-.font-display { font-family: var(--font-display); }
 .font-sans { font-family: var(--font-sans); }
 
 /*
@@ -75,7 +82,18 @@
   font-weight: 400;
 }
 
+/* La caligrafía se reserva para los nombres, el sobre y la despedida; los
+   títulos de sección van en serif para que se lean de un vistazo. */
 .type-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.125rem, 5.8vw, 3rem);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+.type-script-title {
   font-family: var(--font-script);
   font-size: clamp(2.75rem, 6.8vw, 4rem);
   line-height: 1;
@@ -84,19 +102,31 @@
 }
 
 .type-section-heading {
-  font-family: var(--font-script);
-  font-size: clamp(2rem, 5vw, 2.6rem);
-  line-height: 1.05;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.5rem, 4.4vw, 2.0625rem);
+  line-height: 1.2;
   font-weight: 400;
   text-wrap: balance;
 }
 
 .type-section-subheading {
-  font-family: var(--font-script);
-  font-size: clamp(1.75rem, 4.5vw, 2.25rem);
-  line-height: 1.05;
-  font-weight: 400;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.3125rem, 3.8vw, 1.625rem);
+  line-height: 1.2;
+  font-weight: 500;
   text-wrap: balance;
+}
+
+/* Fecha bajo los nombres de la portada */
+.type-hero-date {
+  font-family: var(--font-serif);
+  font-size: clamp(1.125rem, 3.4vw, 1.375rem);
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .type-envelope-title {
@@ -142,11 +172,12 @@
   text-wrap: pretty;
 }
 
+/* Mínimo ~13px: también lo leen abuelos y tíos */
 .type-kicker {
   font-family: var(--font-sans);
-  font-size: clamp(0.75rem, 1.65vw, 0.8125rem);
-  line-height: 1.4;
-  letter-spacing: 0.14em;
+  font-size: clamp(0.8125rem, 1.8vw, 0.875rem);
+  line-height: 1.45;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 700;
   text-wrap: balance;
@@ -154,9 +185,9 @@
 
 .type-meta {
   font-family: var(--font-sans);
-  font-size: clamp(0.75rem, 1.6vw, 0.875rem);
+  font-size: clamp(0.8125rem, 1.7vw, 0.875rem);
   line-height: 1.4;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 700;
   text-wrap: balance;
@@ -212,30 +243,28 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* El día de la boda manda; la cuenta atrás acompaña más discreta */
+.type-date-day {
+  font-family: var(--font-serif);
+  font-size: clamp(3.5rem, 12vw, 4.75rem);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.type-countdown-small {
+  font-family: var(--font-serif);
+  font-size: clamp(1.625rem, 5.5vw, 2.125rem);
+  line-height: 1;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
 .type-account {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: clamp(0.875rem, 2.5vw, 1rem);
   line-height: 1.4;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
-}
-
-.type-account-row {
-  position: relative;
-  display: block;
-  padding-inline: 2.75rem;
-  text-align: center;
-}
-
-.type-account-row .icon-button {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-}
-
-.type-account-row .icon-button:hover {
-  transform: translateY(-50%) scale(1.05);
 }
 
 .type-button {
@@ -248,7 +277,7 @@
 
 .type-caption {
   font-family: var(--font-sans);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.45;
   letter-spacing: 0.06em;
 }
@@ -476,17 +505,125 @@
   font-size: 0.95rem;
 }
 
-.icon-button,
-.audio-skip {
+/* ═══ Reproductor compacto de la portada ═══ */
+.music-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(100%, 300px);
+  margin: 0 auto;
+  padding: 6px 16px 6px 6px;
+  border: 1px solid rgba(89, 95, 67, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  text-align: left;
+}
+
+.music-pill-play {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--olive);
+  color: var(--cream);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.music-pill-play:hover { background: var(--olive-dark); }
+.music-pill-play:active { transform: scale(0.95); }
+
+.music-pill-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.music-pill-title {
+  display: block;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-pill .song-progress {
+  height: 24px;
+  margin: 0;
+}
+
+/* ═══ Botón de copiar cuenta (con estado "Copiado") ═══ */
+.copy-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  margin-top: 6px;
+  border: 1px solid rgba(202, 124, 75, 0.5);
+  border-radius: 999px;
+  color: var(--terracotta);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.rsvp-option {
-  min-height: 44px;
+.copy-pill:hover { background: rgba(202, 124, 75, 0.08); }
+
+.copy-pill.is-copied {
+  background: var(--olive);
+  border-color: var(--olive);
+  color: var(--cream);
+}
+
+/* ═══ Opciones de asistencia como tarjetas ═══ */
+.rsvp-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 1px solid rgba(89, 95, 67, 0.28);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.rsvp-card:hover { background: rgba(89, 95, 67, 0.04); }
+
+.rsvp-card:focus-within {
+  outline: 2px solid var(--olive);
+  outline-offset: 2px;
+}
+
+.rsvp-card.is-selected {
+  border-color: var(--olive);
+  background: rgba(89, 95, 67, 0.07);
+}
+
+.rsvp-card-mark {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid rgba(89, 95, 67, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cream);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.rsvp-card.is-selected .rsvp-card-mark {
+  background: var(--olive);
+  border-color: var(--olive);
 }
 
 /* Floating Audio Control */
@@ -564,31 +701,112 @@
   transform: scale(1.06);
 }
 
+/* En móvil: más pequeño, pegado a la esquina y opaco para no tapar títulos.
+   El área táctil sigue siendo de 44px gracias al ::before invisible. */
+@media (max-width: 640px) {
+  .floating-audio {
+    top: 0.625rem;
+    right: 0.625rem;
+    width: 36px;
+    height: 36px;
+    background: var(--cream);
+    backdrop-filter: none;
+  }
+
+  .floating-audio::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+  }
+
+  .floating-audio svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
-   ENVELOPE SCREEN (SOBRE REALISTA CON SELLO CIRCULAR LIMPIO)
+   ENVELOPE SCREEN (SOBRE REALISTA CON SELLO DE CERA)
+   Fases (clases en .env-screen): is-open → is-out → is-extracting → is-presented → is-leaving
    ═══════════════════════════════════════════════════════ */
 .env-screen {
+  --env-h: 260px;
+  --ltr-h: 350px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.45, 0, 0.2, 1);
+  /* Grano de papel muy sutil para la carta */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   position: fixed;
   inset: 0;
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, #FAF7F2 0%, #E2D7C8 100%);
+  /* Misma paleta crema, con los bordes algo más tostados para que carta y sobre destaquen */
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(250, 246, 239, 0.9) 0%, rgba(250, 246, 239, 0) 100%),
+    radial-gradient(circle at center, #EFE7DA 0%, #DCCFBC 70%, #CFC0AA 100%);
   padding: 1rem;
+  overflow: hidden;
+  /* Al salir, se desvanece cuando la carta ya cubre la pantalla */
+  transition: opacity 0.45s ease 0.5s;
+}
+
+.env-screen.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Flotación sutil mientras espera el toque */
+.env-stage {
+  position: relative;
+  animation: envFloat 3.6s ease-in-out infinite alternate;
+}
+
+.is-open .env-stage {
+  animation-play-state: paused;
+}
+
+@keyframes envFloat {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px); }
 }
 
 .env-wrap {
   position: relative;
   width: min(92vw, 400px);
-  height: 260px;
-  perspective: 1200px;
+  height: var(--env-h);
+  perspective: 1100px;
 }
 
-.env-box {
-  position: relative;
-  width: 100%;
-  height: 100%;
+/* Todo el sobre se puede tocar para abrirlo */
+.env-screen:not(.is-open) .env-wrap {
+  cursor: pointer;
+}
+
+/* Extracción: el sobre (y el hueco de la carta, que recorta con él) baja
+   --drop mientras la carta sube --pull respecto al sobre; ambos con la misma
+   curva, así la carta se desliza fuera del bolsillo de forma continua y termina
+   centrada con la base ya por encima del sobre. */
+.env-screen {
+  --pull: calc(var(--ltr-h) + 30px);
+  --drop: calc(var(--pull) - 18px + (var(--env-h) - var(--ltr-h)) / 2);
+  --extract: 1.1s cubic-bezier(0.55, 0, 0.25, 1);
+}
+
+.env-piece {
+  transition: transform var(--extract), opacity 0.6s ease;
+}
+
+.is-extracting .env-piece {
+  transform: translateY(var(--drop));
+}
+
+/* Con la carta ya fuera, el sobre sigue cayendo un poco y se desvanece */
+.is-presented .env-piece {
+  transform: translateY(calc(var(--drop) + 50px));
+  opacity: 0;
+  transition: transform 0.8s var(--ease-soft), opacity 0.6s ease;
 }
 
 /* Fondo interior del sobre */
@@ -597,9 +815,11 @@
   inset: 0;
   background: #EFE4D4;
   border-radius: 14px;
-  box-shadow: 0 25px 65px rgba(46, 48, 39, 0.25);
+  box-shadow:
+    0 28px 60px -12px rgba(46, 48, 39, 0.3),
+    0 8px 18px rgba(46, 48, 39, 0.08);
   overflow: hidden;
-  border: 1px solid rgba(89, 95, 67, 0.2);
+  border: 1px solid rgba(89, 95, 67, 0.16);
   z-index: 1;
 }
 
@@ -613,52 +833,150 @@
   opacity: 0.45;
 }
 
-/* CARTA HD FÍSICAMENTE DENTRO DEL SOBRE */
+/* Hueco de la carta: recorta por el borde inferior del sobre mientras sale */
+.ltr-slot {
+  position: absolute;
+  top: -440px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform var(--extract);
+}
+
+.is-extracting .ltr-slot {
+  transform: translateY(var(--drop));
+}
+
+/* La carta ya no se solapa con el bolsillo: pasa al frente sin salto visible */
+.is-presented .ltr-slot {
+  overflow: visible;
+  z-index: 30;
+}
+
+/* CARTA DENTRO DEL SOBRE */
 .ltr-card {
   position: absolute;
-  top: 20px;
+  top: calc(440px + 18px);
   left: 16px;
   right: 16px;
-  height: 200px;
-  background: #FAF7F2;
+  height: var(--ltr-h);
+  /* Cartulina: grano sutil y luz en diagonal sobre el crema de la web */
+  background:
+    var(--paper-grain),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 45%),
+    #FDFAF5;
   border-radius: 12px;
-  border: 1.5px solid rgba(89, 95, 67, 0.35);
-  box-shadow: 0 4px 15px rgba(46, 48, 39, 0.12);
-  z-index: 2;
+  border: 1px solid rgba(89, 95, 67, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 8px rgba(46, 48, 39, 0.12);
   padding: 12px;
   transform: translateY(0);
-  transition: transform 0.85s cubic-bezier(0.23, 1, 0.32, 1), height 0.85s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.8s ease;
-  overflow: hidden;
+  transition:
+    transform 0.95s var(--ease-out),
+    box-shadow 0.9s ease,
+    opacity 0.55s ease;
+  pointer-events: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* CARTA HD ELEVADA AL ABRIR */
-.ltr-card.out {
-  top: 10px;
-  transform: translateY(-155px);
-  height: 345px;
-  z-index: 50;
-  box-shadow: 0 25px 60px rgba(46, 48, 39, 0.32);
+/* Sale del sobre (queda con la base aún dentro del bolsillo), algo ladeada como
+   sacada a mano; su sombra cae sobre la solapa abierta de detrás */
+.is-out .ltr-card {
+  transform: translateY(-205px) rotate(-1.8deg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 -4px 10px rgba(62, 52, 36, 0.12),
+    0 -10px 28px rgba(62, 52, 36, 0.16);
+}
+
+/* Termina de salir mientras el sobre baja; se ladea un poco al otro lado */
+.is-extracting .ltr-card {
+  transform: translateY(calc(-1 * var(--pull))) rotate(0.9deg);
+  transition:
+    transform var(--extract),
+    box-shadow 0.9s ease,
+    opacity 0.55s ease;
+}
+
+/* Centrada frente al usuario: se endereza y se asienta con un leve rebote */
+.is-presented .ltr-card {
+  transform: translateY(calc(-1 * var(--pull))) rotate(0deg) scale(1.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 36px 70px -14px rgba(62, 52, 36, 0.45),
+    0 12px 24px rgba(62, 52, 36, 0.16),
+    0 1px 3px rgba(62, 52, 36, 0.18);
+  transition:
+    transform 0.9s cubic-bezier(0.34, 1.35, 0.64, 1),
+    box-shadow 1s ease,
+    opacity 0.55s ease;
+}
+
+/* Hacia la web: el texto se retira y la carta crece hasta cubrir la pantalla
+   (--fill lo calcula JS) fundiéndose con el crema de la portada */
+.is-leaving .ltr-card {
+  transform: translateY(calc(-1 * var(--pull))) scale(var(--fill, 3));
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 0;
+  transition:
+    transform 0.75s cubic-bezier(0.65, 0, 0.35, 1),
+    border-radius 0.75s ease,
+    box-shadow 0.4s ease,
+    opacity 0.4s ease 0.55s;
+}
+
+.is-leaving .ltr-inner-content {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* Contenido en cascada mientras la carta asoma (--i: orden de aparición) */
+.ltr-reveal {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s var(--ease-out);
+  transition-delay: calc(0.15s + var(--i, 0) * 0.18s);
+}
+
+.is-out .ltr-reveal {
+  opacity: 1;
+  transform: none;
 }
 
 .ltr-inner-content {
-  border: 1px dashed rgba(89, 95, 67, 0.35);
+  border: 1px dashed rgba(89, 95, 67, 0.4);
   border-radius: 8px;
-  padding: 14px 12px;
+  padding: 16px 14px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  background: #FAF7F2;
   position: relative;
   text-align: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* El botón forma parte de la carta desde el principio (sin huecos), pero solo
+   responde cuando la carta ya está presentada */
+.ltr-cta {
+  pointer-events: none;
+}
+
+.is-presented .ltr-cta {
+  pointer-events: auto;
 }
 
 /* Solapas frontales del sobre (bolsillo frontal) */
@@ -671,147 +989,259 @@
   overflow: hidden;
 }
 
-.flap-l {
+.flap-l,
+.flap-r,
+.flap-b,
+.flap-face {
   position: absolute;
   inset: 0;
+}
+
+/* La sombra va en el contenedor y el recorte en .flap-face: si ambos están en
+   el mismo elemento, el clip-path recorta también la sombra y no se ve.
+   Cada solapa lleva un filo de luz en el pliegue y una sombra hacia lo que tapa. */
+.flap-l {
   z-index: 2;
-  background: linear-gradient(135deg, #EAE0D1, #DDD1C0);
-  clip-path: polygon(0 0, 52% 48%, 0 100%);
-  filter: drop-shadow(2px 0 3px rgba(46, 48, 39, 0.12));
+  filter:
+    drop-shadow(1px 0 0 rgba(255, 252, 246, 0.7))
+    drop-shadow(3px 1px 4px rgba(62, 52, 36, 0.2));
+}
+
+.flap-l > .flap-face {
+  background: linear-gradient(115deg, #EAE0D1 0%, #E3D8C7 60%, #D9CDBA 100%);
+  clip-path: polygon(0 0, 52% 50%, 0 100%);
 }
 
 .flap-r {
-  position: absolute;
-  inset: 0;
   z-index: 2;
-  background: linear-gradient(225deg, #E8DEC0, #D9CCA9);
-  clip-path: polygon(100% 0, 48% 48%, 100% 100%);
-  filter: drop-shadow(-2px 0 3px rgba(46, 48, 39, 0.12));
+  filter:
+    drop-shadow(-1px 0 0 rgba(255, 252, 246, 0.7))
+    drop-shadow(-3px 1px 4px rgba(62, 52, 36, 0.2));
+}
+
+.flap-r > .flap-face {
+  background: linear-gradient(245deg, #E8DECE 0%, #E1D6C4 60%, #D7CBB8 100%);
+  clip-path: polygon(100% 0, 48% 50%, 100% 100%);
 }
 
 .flap-b {
-  position: absolute;
-  inset: 0;
   z-index: 3;
-  background: linear-gradient(180deg, #EFE6D8, #DFD3C2);
-  clip-path: polygon(0 100%, 50% 48%, 100% 100%);
-  filter: drop-shadow(0 -4px 6px rgba(46, 48, 39, 0.15));
+  filter:
+    drop-shadow(0 -1px 0 rgba(255, 252, 246, 0.85))
+    drop-shadow(0 -3px 6px rgba(62, 52, 36, 0.22));
 }
 
-/* Solapa superior móvil (Debajo del sello de cera) */
+.flap-b > .flap-face {
+  background: linear-gradient(180deg, #F3EBDF 0%, #EAE0D1 45%, #DFD3C1 100%);
+  clip-path: polygon(0 100%, 50% 46%, 100% 100%);
+}
+
+/* Solapa superior: gira en 3D; pasa detrás de la carta a mitad del giro */
 .env-top {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 135px;
-  background: linear-gradient(180deg, #F5ECE0, #E4D8C8);
-  clip-path: polygon(0 0, 50% 100%, 100% 0);
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
+  height: 52%;
   transform-origin: top center;
   transform: rotateX(0deg);
-  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 6;
-  filter: drop-shadow(0 6px 12px rgba(46, 48, 39, 0.18));
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 252, 246, 0.8))
+    drop-shadow(0 4px 6px rgba(62, 52, 36, 0.24));
+  /* Empieza tras el golpe al sello; se pasa unos grados y vuelve, como papel
+     doblado. Con esta curva pasa de canto (90°) hacia los 0.47s. */
+  transition:
+    transform 0.8s cubic-bezier(0.3, 1.25, 0.5, 1) 0.35s,
+    z-index 0s linear 0.47s,
+    filter 0.3s ease 0.47s,
+    opacity 0.6s ease 0.1s;
 }
 
-.env-top.open {
+.env-top > .flap-face {
+  /* Mismo radio que el sobre para que las esquinas superiores no sobresalgan */
+  border-radius: 14px 14px 0 0;
+  background: linear-gradient(180deg, #F6EEE2 0%, #EDE3D4 55%, #E2D6C4 100%);
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+}
+
+/* Cara interior de la solapa (mismo forro punteado). Se muestra con opacidad,
+   que sí respeta el retraso, justo cuando la solapa pasa de canto. */
+.env-top > .flap-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(rgba(202, 124, 75, 0.35) 0.75px, transparent 0.75px) 0 0 / 16px 16px,
+    linear-gradient(0deg, #F3EADC 0%, #E8DCCA 100%);
+  opacity: 0;
+  transition: opacity 0s linear 0.47s;
+}
+
+.is-open .env-top {
   transform: rotateX(180deg);
   z-index: 0;
+  filter: drop-shadow(0 -2px 4px rgba(46, 48, 39, 0.08));
+}
+
+.is-open .env-top > .flap-face::after {
+  opacity: 1;
+}
+
+.is-extracting .env-top {
+  transform: translateY(var(--drop)) rotateX(180deg);
+  transition: transform var(--extract), opacity 0.6s ease;
+}
+
+.is-presented .env-top {
+  transform: translateY(calc(var(--drop) + 50px)) rotateX(180deg);
+  opacity: 0;
+  transition: transform 0.8s var(--ease-soft), opacity 0.6s ease;
 }
 
 /* ═══════════════════════════════════════════════════════
-   SELLO DE CERA CIRCULAR LIMPIO Y ELEGANTE (SIN FORMAS EXTRAÑAS)
+   SELLO DE CERA (SE PARTE EN DOS AL ABRIR)
    ═══════════════════════════════════════════════════════ */
 .wax-seal-btn {
   position: absolute;
-  top: 92px;
+  top: calc(var(--env-h) * 0.52 - 48px);
   left: 50%;
-  transform: translateX(-50%);
-  width: 86px;
-  height: 86px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #DC8956 0%, #CA7C4B 55%, #8E441B 100%);
-  box-shadow: 
-    0 8px 22px rgba(142, 68, 27, 0.45),
-    0 2px 6px rgba(0, 0, 0, 0.2),
-    inset 0 2px 4px rgba(255, 255, 255, 0.35),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.35);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
+  width: 96px;
+  height: 96px;
+  margin-left: -48px;
+  padding: 0;
   border: none;
+  border-radius: 50%;
+  background: transparent;
   cursor: pointer;
   z-index: 20;
-  transition: transform 0.35s ease, opacity 0.3s ease;
-  animation: pulseOrganicSeal 2.8s infinite alternate ease-in-out;
+  /* Sombra corta de contacto + halo cálido: la cera está pegada al papel */
+  filter:
+    drop-shadow(0 2px 2px rgba(92, 36, 10, 0.35))
+    drop-shadow(0 7px 12px rgba(142, 68, 27, 0.28));
+  transition: transform 0.3s var(--ease-out);
+}
+
+/* Halo que invita a tocar */
+.wax-seal-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(202, 124, 75, 0.55);
+  animation: sealHalo 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sealHalo {
+  0% { transform: scale(1); opacity: 0.8; }
+  80%, 100% { transform: scale(1.45); opacity: 0; }
 }
 
 .wax-seal-btn:hover {
-  transform: translateX(-50%) scale(1.06);
+  transform: scale(1.06);
 }
 
-.wax-seal-btn.opened {
+.wax-seal-btn:active {
+  transform: scale(0.96);
+}
+
+.wax-seal-btn:focus-visible {
+  outline: 2px solid var(--olive);
+  outline-offset: 5px;
+}
+
+.wax-seal-btn:disabled {
+  cursor: default;
+  transform: none;
+}
+
+.is-open .wax-seal-btn::before {
+  animation: none;
   opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%) scale(0) rotate(-20deg);
 }
 
-.seal-ring {
+/* Al tocarlo, el sello se hunde un instante antes de partirse */
+.is-open .wax-seal-btn {
+  animation: sealPress 0.22s ease-out;
+}
+
+@keyframes sealPress {
+  0% { transform: scale(1); }
+  45% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.is-open .seal-half {
+  transition:
+    transform 0.6s cubic-bezier(0.3, 0.7, 0.3, 1) 0.16s,
+    opacity 0.45s ease 0.3s;
+}
+
+/* Cada mitad contiene el sello SVG completo (WaxSeal en App.jsx) */
+.seal-half {
   position: absolute;
-  inset: 7px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 40%, #B86533 0%, #7E3E18 90%);
-  box-shadow: 
-    inset 0 3px 6px rgba(0, 0, 0, 0.5),
-    inset 0 -1px 2px rgba(255, 255, 255, 0.15),
-    0 1px 2px rgba(255, 255, 255, 0.12);
-  border: 1.5px dashed rgba(247, 231, 205, 0.6);
-  pointer-events: none;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  inset: 0;
+  transition:
+    transform 0.6s cubic-bezier(0.3, 0.7, 0.3, 1),
+    opacity 0.45s ease 0.15s;
 }
 
-.seal-inner {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  width: 100%;
-  padding: 0 10px;
-}
-
-.seal-initials {
-  font-family: var(--font-script);
-  font-size: 1.05rem;
-  color: #F7E7CD;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
+.wax-seal-svg {
   display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
-.seal-action {
-  font-size: 0.5rem;
-  font-family: var(--font-sans);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 700;
-  color: #FFF6EE;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-  margin-top: 2px;
+.wax-monogram {
+  font-family: var(--font-script);
 }
 
-@keyframes pulseOrganicSeal {
-  0% { box-shadow: 0 8px 22px rgba(142, 68, 27, 0.45), 0 0 0 0 rgba(202, 124, 75, 0.6); }
-  100% { box-shadow: 0 12px 28px rgba(142, 68, 27, 0.6), 0 0 0 10px rgba(202, 124, 75, 0); }
+/* Cerrado: solo se ve la mitad izquierda sin recortar (sello entero, sin costura).
+   Al abrir, ambas mitades se recortan por una grieta irregular y caen. */
+.seal-right {
+  visibility: hidden;
+}
+
+.is-open .seal-left {
+  clip-path: polygon(0 0, 53% 0, 47% 27%, 55% 50%, 46% 73%, 52% 100%, 0 100%);
+  transform: translate(-22px, 30px) rotate(-28deg);
+  opacity: 0;
+}
+
+.is-open .seal-right {
+  visibility: visible;
+  clip-path: polygon(53% 0, 100% 0, 100% 100%, 52% 100%, 46% 73%, 55% 50%, 47% 27%);
+  transform: translate(22px, 36px) rotate(24deg);
+  opacity: 0;
+}
+
+/* Indicación bajo el sobre */
+.env-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 28px);
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+  color: rgba(89, 95, 67, 0.75);
+  letter-spacing: 0.02em;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.is-open .env-hint {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .env-screen,
+  .env-screen *,
+  .env-screen *::before {
+    animation: none !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0s !important;
+  }
 }

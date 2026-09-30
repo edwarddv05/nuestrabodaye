@@ -1,0 +1,9 @@
+# Invitación privada: fuera de los buscadores, pero con vista previa al compartir
+User-agent: facebookexternalhit
+User-agent: WhatsApp
+User-agent: TelegramBot
+User-agent: Twitterbot
+Allow: /
+
+User-agent: *
+Disallow: /
