@@ -4,10 +4,6 @@ import { BotanicalBranch } from "../components/Decor";
 import { MusicPill } from "../components/MusicPlayer";
 import { TornPhoto } from "../components/Photo";
 
-// "24 · Octubre · 2026"
-const month = W.date.toLocaleDateString("es-PE", { month: "long" });
-const heroDate = [W.date.getDate(), month, W.date.getFullYear()];
-
 /* ═══════════════════════════════════════════════════
    PORTADA: NOMBRES, CANCIÓN Y PRIMERA FOTO
    ═══════════════════════════════════════════════════ */
@@ -31,16 +27,9 @@ export function Hero({ audio, entered }) {
             {W.groom}
           </h1>
 
-          <p className="type-hero-date text-charcoal mt-5 mb-8">
-            {heroDate.map((part, i) => (
-              <span key={i}>
-                {i > 0 && <span className="text-terracotta mx-2.5" aria-hidden="true">·</span>}
-                {part}
-              </span>
-            ))}
-          </p>
-
-          <MusicPill audio={audio} />
+          <div className="mt-8">
+            <MusicPill audio={audio} />
+          </div>
         </motion.div>
       </header>
 

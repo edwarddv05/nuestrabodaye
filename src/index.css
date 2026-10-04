@@ -130,16 +130,6 @@
   text-wrap: balance;
 }
 
-/* Fecha bajo los nombres de la portada */
-.type-hero-date {
-  font-family: var(--font-serif);
-  font-size: clamp(1.125rem, 3.4vw, 1.375rem);
-  line-height: 1.3;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .type-envelope-title {
   font-family: var(--font-script);
   font-size: clamp(2.25rem, 10vw, 3rem);
