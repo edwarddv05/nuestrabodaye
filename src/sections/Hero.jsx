@@ -28,6 +28,7 @@ export function Hero({ audio, entered }) {
           </h1>
 
           <div className="mt-8">
+            <p className="type-kicker text-muted mb-3">Escucha nuestra canción</p>
             <MusicPill audio={audio} />
           </div>
         </motion.div>
