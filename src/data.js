@@ -64,7 +64,7 @@ export const wedding = {
   },
   itinerary: [
     {
-      time: "4:00 – 4:30 p. m.",
+      time: "4:00 p. m.",
       title: "Recepción de invitados",
       desc: "Llegada y bienvenida de nuestros invitados",
       type: "reception",
