@@ -6,7 +6,7 @@ export const wedding = {
   title: "NUESTRA BODA",
   date: new Date(2026, 9, 24, 16, 0, 0),
   displayTime: "4:00 p. m.",
-  rsvpDeadline: "7 de octubre de 2026",
+  rsvpDeadline: "10 de octubre de 2026",
   quote: "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que quieres, los convierte en momentos inolvidables.",
   verse: {
     text: "Todo lo hizo hermoso en su tiempo",
