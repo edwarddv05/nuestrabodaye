@@ -37,7 +37,7 @@ export function Rsvp({ showToast }) {
       <Reveal>
         <h2 className="type-section-title text-olive mb-2">Confirmación de asistencia</h2>
         <p className="type-lead text-charcoal max-w-md mx-auto mb-8 leading-relaxed">
-          Tu presencia es muy importante para nosotros. Por favor, confírmanos tu asistencia antes del {W.rsvpDeadline}.
+          Tu presencia es muy importante para nosotros. Por favor, confírmanos tu asistencia hasta el {W.rsvpDeadline}.
         </p>
 
         <div className="space-y-6 text-left">
